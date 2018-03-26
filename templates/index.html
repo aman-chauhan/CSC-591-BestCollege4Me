@@ -8,28 +8,25 @@
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/fontawesome.css" integrity="sha384-q3jl8XQu1OpdLgGFvNRnPdj5VIlCvgsDQTQB6owSOHWlAurxul7f+JpUOVdAiJ5P" crossorigin="anonymous">
 		
 		<!-- my css -->
-		<!-- <link rel="stylesheet" href="style/style.css"> -->
+		<link rel="stylesheet" href="style/style.css">
+
+		<!-- jQuery library -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 		
 		<!-- Latest compiled Bootstrap CSS -->
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.css">
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.js"></script>
-
-		<!-- jQuery library -->
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
 		<!-- Latest compiled JavaScript -->
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
 
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-route.min.js"></script>
 		
-		<!-- latest d3 visualization library -->
-		<script src="https://d3js.org/d3.v4.min.js"></script>
-		
 		<meta charset="UTF-8">
 		<title>What College is Best for Me?</title>
     
 	</head>
-	<body> <!-- ng-app="angular_app" ng-controller="angular_ctrl"> -->
+	<body ng-app="angular_app" ng-controller="angular_ctrl">
 		<nav class="navbar navbar-expand-lg navbar-light bg-light">
 			<a class="navbar-brand" href="#">What College is Best for Me?</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,18 +39,171 @@
 						<a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
 					</li>
 
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
-						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-							<a class="dropdown-item" href="#">Action</a>
-							<a class="dropdown-item" href="#">Another action</a>
-							<div class="dropdown-divider"></div>
-							<a class="dropdown-item" href="#">Something else here</a>
-						</div>
+				</ul>
+
+				<ul class="nav justify-content-end">
+					<li class="nav-item">
+						<a class="nav-link active" href="#" ng-click="show_info_menu()">
+							<span>
+								<i class="fa fa-lg fa-question-circle"></i>
+							</span>
+						</a>
 					</li>
 				</ul>
 			</div>
         </nav>
+
+        
+        <div class="row custom_gutter">
+        	<div class="col-3">
+        		<div class="card text-center">
+        			<div class="card-header">
+        				<h5 class="card-title">User Inputs</h5>
+        			</div>
+
+        			<div class="card-body">
+        				<div class="input group mb-3">
+        					<select class="custom-select" id="filter_1" ng-model="filter_1" ng-options="x.option for x in sample_opts">
+        						<option value="" disabled selected>User Input 1</option>
+        					</select>
+        				</div>
+
+        				<div class="input group mb-3">
+        					<select class="custom-select" id="filter_2" ng-model="filter_2" ng-options="x.option for x in sample_opts">
+        						<option value="" disabled selected>User Input 2</option>
+        					</select>
+        				</div>
+
+        				<div class="input group mb-3">
+        					<select class="custom-select" id="filter_3" ng-model="filter_3" ng-options="x.option for x in sample_opts">
+        						<option value="" disabled selected>User Input 3</option>
+        					</select>
+        				</div>
+
+        				<div class="input group mb-3">
+        					<select class="custom-select" id="filter_4" ng-model="filter_4" ng-options="x.option for x in sample_opts">
+        						<option value="" disabled selected>User Input 4</option>
+        					</select>
+        				</div>
+
+        				<div class="input group mb-3">
+        					<select class="custom-select" id="filter_5" ng-model="filter_5" ng-options="x.option for x in sample_opts">
+        						<option value="" disabled selected>User Input 5</option>
+        					</select>
+        				</div>
+        			</div>
+        		</div>
+        	</div>
+
+        	<div class="col-8">
+        		<h3>Content Table</h3>
+
+        		<div class="input-group mb-3">
+  					<div class="input-group-prepend">
+    					<span class="input-group-text" id="search_icon">
+    						<i class="fa fa-search"></i>
+    					</span>
+  					</div>
+  					<input type="text" class="form-control" placeholder="Search for a school" ng-model="search_schools.name" aria-describedby="search_icon">
+				</div>
+
+        		<div class="table-responsive">
+        			<table class="table table-hover table-dark">
+        				<thead>
+        					<tr>
+        						<th>
+        							<a class="header_sort" href="" ng-click="sortType = 'name'; sortReverse = !sortReverse">School Name
+										<span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
+										<span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
+									</a>
+								</th>
+								<th>
+        							<a class="header_sort" href="" ng-click="sortType = 'city'; sortReverse = !sortReverse">City
+										<span ng-show="sortType == 'city' && !sortReverse" class="fa fa-caret-down"></span>
+										<span ng-show="sortType == 'city' && sortReverse" class="fa fa-caret-up"></span>
+									</a>
+								</th>
+								<th>
+        							<a class="header_sort" href="" ng-click="sortType = 'state'; sortReverse = !sortReverse">State
+										<span ng-show="sortType == 'state' && !sortReverse" class="fa fa-caret-down"></span>
+										<span ng-show="sortType == 'state' && sortReverse" class="fa fa-caret-up"></span>
+									</a>
+								</th>
+								<th>
+        							<a class="header_sort" href="" ng-click="sortType = 'campus'; sortReverse = !sortReverse">Campus
+										<span ng-show="sortType == 'campus' && !sortReverse" class="fa fa-caret-down"></span>
+										<span ng-show="sortType == 'campus' && sortReverse" class="fa fa-caret-up"></span>
+									</a>
+								</th>
+								<th>
+        							<a class="header_sort" href="" ng-click="sortType = 'public'; sortReverse = !sortReverse">Public or Private
+										<span ng-show="sortType == 'public' && !sortReverse" class="fa fa-caret-down"></span>
+										<span ng-show="sortType == 'public' && sortReverse" class="fa fa-caret-up"></span>
+									</a>
+								</th>
+        					</tr>
+        				</thead>
+
+        				<tbody>
+        					<tr ng-repeat="univ in sample_univ | orderBy : sortType : sortReverse | filter : search_schools">
+        						<td>{{ univ.name }}</td>
+        						<td>{{ univ.city }}</td>
+        						<td>{{ univ.state }}</td>
+        						<td>{{ univ.campus }}</td>
+        						<td>{{ univ.public }}</td>
+        					</tr>
+        				</tbody>
+        			</table>
+        		</div>
+        	</div>
+
+        	<div class="modal" id="info_modal">
+        		<div class="modal-content" id="info_modal_body">
+        			<span class="close">&times;</span>
+        			<h5>Information about how our application works</h5>
+        		</div>
+        	</div>
+        </div>
+
+        <script type="text/javascript">
+        	var app = angular.module( 'angular_app', [] );
+			app.controller( 'angular_ctrl', [ '$scope', '$http', function ( $scope, $http ) {
+    			$scope.sample_opts = [
+        			{ option : "Option 1" },
+        			{ option : "Option 2" },
+        			{ option : "Option 3" }
+   				];
+
+   				$scope.sample_univ = [
+   					{ name : 'NC State', city : 'Raleigh', state : 'NC', campus : 'Urban', public : 'Public' },
+   					{ name : 'UNC', city : 'Chapel Hill', state : 'NC', campus : 'Urban', public : 'Public' },
+   					{ name : 'Duke', city : 'Durham', state : 'NC', campus : 'Urban', public : 'Private' },
+   				]
+
+   				$scope.show_info_menu = function() {
+   					$( '#info_modal' ).show( 200 );
+   				}
+
+			} ] );
+
+			$( '.close' ).click( function() {
+				$( this ).parent().parent().hide( 250 );
+			} );
+
+			function on_page_load() {
+				$( '#info_modal' ).hide();
+				$( '#info_modal_body' ).width( $( window ).width() * 0.35 );
+				$( '#info_modal_body' ).height( $( window ).height() * 0.45 );
+			}
+
+			if ( !window.isLoaded ) {
+				window.addEventListener( "load", function() {
+					on_page_load();
+				}, false );
+			} else {
+				on_page_load();
+			}
+        </script>
 	</body>
 
 </html>
