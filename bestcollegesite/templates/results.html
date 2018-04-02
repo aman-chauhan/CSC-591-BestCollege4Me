@@ -8,7 +8,8 @@
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/fontawesome.css" integrity="sha384-q3jl8XQu1OpdLgGFvNRnPdj5VIlCvgsDQTQB6owSOHWlAurxul7f+JpUOVdAiJ5P" crossorigin="anonymous">
 		
 		<!-- my css -->
-		<link rel="stylesheet" href="style/style.css">
+        {% load static %}
+		<link rel="stylesheet" href="{%static 'style/style.css' %}">
 
 		<!-- jQuery library -->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -146,11 +147,13 @@
 
         				<tbody>
         					<tr ng-repeat="univ in sample_univ | orderBy : sortType : sortReverse | filter : search_schools">
+                                {% verbatim %}
         						<td>{{ univ.name }}</td>
         						<td>{{ univ.city }}</td>
         						<td>{{ univ.state }}</td>
         						<td>{{ univ.campus }}</td>
         						<td>{{ univ.public }}</td>
+                                {% endverbatim %}
         					</tr>
         				</tbody>
         			</table>

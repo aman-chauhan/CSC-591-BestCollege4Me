@@ -10,9 +10,45 @@
   }
 }
 
+header.masthead {
+  padding-top: 12%;
+  height: 94vh;
+  background-image: url( "img/library1.jpg" );
+  background-position: center center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+.navbar {
+    height: 6vh;
+    background-color: transparent !important;
+    border-color: transparent !important;
+}
+
+header.masthead hr {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+header.masthead h1 {
+  font-size: 2rem;
+}
+
+header.masthead p {
+  font-weight: 300;
+}
+
 .header_sort {
 	font-weight: bold !important;
 	color: #fff !important;
+}
+
+hr {
+  max-width: 5%;
+  border-width: 3px;
+  border-color: #fff !important;
 }
 
 .modal {
