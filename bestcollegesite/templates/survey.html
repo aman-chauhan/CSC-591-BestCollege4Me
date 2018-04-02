@@ -21,64 +21,58 @@
 		<!-- Latest compiled JavaScript -->
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
 
+        <!-- surveyjs angular -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/survey-angular/1.0.16/survey.angular.min.js"></script>
+
+        <!-- surveyjs jquery -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/survey-jquery/1.0.16/survey.jquery.min.js"></script>
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/survey-jquery/1.0.16/survey.min.css">
+
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-route.min.js"></script>
 		
 		<meta charset="UTF-8">
 		<title>What College is Best for Me?</title>
     
 	</head>
-	<body class="home_body" ng-app="angular_app" ng-controller="angular_ctrl">
+	<body ng-app="angular_app" ng-controller="angular_ctrl">
 		<nav id="top_nav" class="navbar navbar-expand-lg navbar-light bg-light">
-			<a class="navbar-brand" href="#">What College is Best for Me?</a>
-			<button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    			<span class="navbar-toggler-icon"></span>
-  			</button>
+            <a class="navbar-brand" href="#">What College is Best for Me?</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-			<div class="collapse navbar-collapse" id="navbarSupportedContent">
-				<ul class="navbar-nav mr-auto">
-					<li class="nav-item active">
-						<a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-					</li>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'survey' %}">Get Started <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="{% url 'index' %}">Home <span class="sr-only">(current)</span></a>
                     </li>
-				</ul>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Get Started <span class="sr-only">(current)</span></a>
+                    </li>
+                </ul>
 
-				<ul class="nav justify-content-end">
-					<li class="nav-item">
-						<a class="nav-link active" href="#" ng-click="show_info_menu()">
-							<span>
-								<i class="fa fa-lg fa-question-circle"></i>
-							</span>
-						</a>
-					</li>
-				</ul>
-			</div>
+                <ul class="nav justify-content-end">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#" ng-click="show_info_menu()">
+                            <span>
+                                <i class="fa fa-lg fa-question-circle"></i>
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </nav>
 
-        <header class="masthead text-center text-white d-flex">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-10 mx-auto">
-                        <h1 class="text-uppercase">
-                            <strong>What College is the best fit for you?</strong>
-                        </h1>
-                        <hr>
-                    </div>
-
-                    <div class="col-lg-8 mx-auto">
-                        <p class="text-faded mb-5">Feeling overwhelmed searching for the right college? We can help you narrow down your search. Start by clicking the button below!</p>
-
-                        <a id="start_btn" class="btn btn-primary btn-xl" href="{% url 'survey' %}">Start Now</a>
-                    </div>
-                </div>
-            </div>
-        </header>
         
-        <div class="modal" id="info_modal">
-        	<div class="modal-content" id="info_modal_body">
-        		<span class="close">&times;</span>
-        		<h5>FAQ</h5>
+        <div class="row custom_gutter">
+        	
+
+        	<div class="modal" id="info_modal">
+        		<div class="modal-content" id="info_modal_body">
+        			<span class="close">&times;</span>
+        			<h5>Information about how our application works</h5>
+        		</div>
         	</div>
         </div>
 

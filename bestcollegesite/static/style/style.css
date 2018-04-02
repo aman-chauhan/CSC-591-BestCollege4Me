@@ -10,9 +10,7 @@
   }
 }
 
-header.masthead {
-  padding-top: 12%;
-  height: 94vh;
+.home_body {
   background-image: url( "img/library1.jpg" );
   background-position: center center;
   -webkit-background-size: cover;
@@ -21,10 +19,47 @@ header.masthead {
   background-size: cover;
 }
 
-.navbar {
+header.masthead {
+  padding-top: 12%;
+  height: 94vh;
+  
+}
+
+#top_nav {
     height: 6vh;
-    background-color: transparent !important;
+    background-color: rgba( 204, 0, 0, 0.7 ) !important;
     border-color: transparent !important;
+}
+
+#top_nav .navbar-nav > li.nav-item > a.nav-link,
+#top_nav .navbar-nav > li.nav-item > a.nav-link:focus {
+  font-size: .9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #212529;
+}
+
+#top_nav .navbar-nav > li.nav-item > a.nav-link:hover,
+#top_nav .navbar-nav > li.nav-item > a.nav-link:focus:hover {
+  color: #fff;
+}
+
+#top_nav .navbar-brand {
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+#start_btn {
+  font-weight: 700;
+  background-color: #CC0000 !important;
+  border-color: #fff;
+  border: none;
+  border-radius: 300px;
+}
+
+.btn-xl {
+  padding: 1rem 2rem;
 }
 
 header.masthead hr {
