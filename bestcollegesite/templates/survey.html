@@ -35,7 +35,7 @@
 		<title>What College is Best for Me?</title>
     
 	</head>
-	<body ng-app="angular_app" ng-controller="angular_ctrl">
+	<body class="home_body" ng-app="angular_app" ng-controller="angular_ctrl">
 		<nav id="top_nav" class="navbar navbar-expand-lg navbar-light bg-light">
             <a class="navbar-brand" href="#">What College is Best for Me?</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -65,8 +65,60 @@
         </nav>
 
         
-        <div class="row custom_gutter">
-        	
+        <div>
+        	<div class="card mx-auto survey-card">
+                <div class="card-header">Survey Content in here</div>
+                <div class="card-body">
+                    <h5 class="card-title">First, A Few Questions...</h5>
+                    <ul>
+                        <li>
+                            <p class="card-text">SurveyJS Question 1...</p>
+                            <ul>
+                                <li>Choice A</li>
+                                <li>Choice B</li>
+                                <li>Choice C</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <p class="card-text">SurveyJS Question 2...</p>
+                            <ul>
+                                <li>Choice A</li>
+                                <li>Choice B</li>
+                                <li>Choice C</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <p class="card-text">SurveyJS Question 3...</p>
+                            <ul>
+                                <li>Choice A</li>
+                                <li>Choice B</li>
+                                <li>Choice C</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <p class="card-text">SurveyJS Question 4...</p>
+                            <ul>
+                                <li>Choice A</li>
+                                <li>Choice B</li>
+                                <li>Choice C</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <div class="btn-group-survey-nav">
+                        <a class="btn btn-primary btn-back" href="#">
+                            <span>
+                                <i class="fa fa-chevron-left"></i>
+                            </span>
+                        </a>
+                        <a class="btn btn-primary btn-next" href="#">
+                            <span>
+                                <i class="fa fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
 
         	<div class="modal" id="info_modal">
         		<div class="modal-content" id="info_modal_body">

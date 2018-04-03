@@ -12,6 +12,7 @@
 
 .home_body {
   background-image: url( "img/library1.jpg" );
+  background-repeat: no-repeat;
   background-position: center center;
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -23,6 +24,16 @@ header.masthead {
   padding-top: 12%;
   height: 94vh;
   
+}
+
+.survey-card {
+    height: 75vh;
+    width: 75vw;
+    margin-top: 2% !important;
+}
+
+.btn-group-survey-nav {
+    display: flex;
 }
 
 #top_nav {
@@ -56,6 +67,25 @@ header.masthead {
   border-color: #fff;
   border: none;
   border-radius: 300px;
+}
+
+.btn-back {
+  background-color: #CC0000 !important;
+  border-color: #fff !important;
+  border: none !important;
+  border-radius: 300px !important;
+  font-weight: 700 !important;
+  float: left !important;
+}
+
+.btn-next {
+  background-color: #CC0000 !important;
+  border-color: #fff !important;
+  border: none !important;
+  border-radius: 300px !important;
+  font-weight: 700 !important;
+  float: right !important;
+  margin-left: 95%;
 }
 
 .btn-xl {
