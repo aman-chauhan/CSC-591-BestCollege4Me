@@ -32,6 +32,18 @@ header.masthead {
     margin-top: 2% !important;
 }
 
+div.tooltip {   
+            position: absolute;         
+            text-align: center;
+            font: 12px sans-serif;
+            color: #fff;                            
+            padding: 2px;                   
+            background: #343a40;
+            border: 0px;        
+            border-radius: 8px;         
+            pointer-events: none;        
+}
+
 .btn-group-survey-nav {
     display: flex;
 }

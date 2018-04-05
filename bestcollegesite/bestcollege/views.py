@@ -13,3 +13,7 @@ def index( request ):
 def survey( request ):
 	template = loader.get_template( 'survey.html' )
 	return HttpResponse( template.render() )
+
+def results( request ):
+	template = loader.get_template( 'results.html' )
+	return HttpResponse( template.render() )
