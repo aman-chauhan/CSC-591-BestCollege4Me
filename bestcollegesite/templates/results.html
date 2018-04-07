@@ -30,7 +30,7 @@
 		<title>What College is Best for Me?</title>
     
 	</head>
-	<body ng-app="angular_app" ng-controller="angular_ctrl">
+	<body class="home_body" ng-app="angular_app" ng-controller="angular_ctrl">
 		<nav id="top_nav" class="navbar navbar-expand-lg navbar-light bg-light">
             <a class="navbar-brand" href="#">What College is Best for Me?</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,7 +40,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="{% url 'index' %}">Home <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item active">
                         <a class="nav-link" href="{% url 'survey' %}">Get Started <span class="sr-only">(current)</span></a>
@@ -64,109 +64,85 @@
 
         
         <div class="row custom_gutter">
-        	<div class="col-3">
-        		<div class="card text-center">
-        			<div class="card-header">
-        				<h5 class="card-title">User Inputs</h5>
-        			</div>
+        	<div class="col-6">
+                <div class="card mx-auto">
+                    <div class="card-header">Results</div>
+                    <div class="card-body">
+                        <h5 class="card-title">Content Table</h5>
 
-        			<div class="card-body">
-        				<div class="input group mb-3">
-        					<select class="custom-select" id="filter_1" ng-model="filter_1" ng-options="x.option for x in sample_opts">
-        						<option value="" disabled selected>User Input 1</option>
-        					</select>
+                		<div class="input-group mb-3">
+          					<div class="input-group-prepend">
+            					<span class="input-group-text" id="search_icon">
+            						<i class="fa fa-search"></i>
+            					</span>
+          					</div>
+          					<input type="text" class="form-control" placeholder="Search for a school" ng-model="search_schools.name" aria-describedby="search_icon">
         				</div>
 
-        				<div class="input group mb-3">
-        					<select class="custom-select" id="filter_2" ng-model="filter_2" ng-options="x.option for x in sample_opts">
-        						<option value="" disabled selected>User Input 2</option>
-        					</select>
-        				</div>
+                		<div class="table-responsive">
+                			<table class="table table-hover table-dark">
+                				<thead>
+                					<tr>
+                                        <th>
+                                            <a class="header_sort" href="" ng-click="sortType = 'rank'; sortReverse = !sortReverse">Rank
+                                                <span ng-show="sortType == 'rank' && !sortReverse" class="fa fa-caret-down"></span>
+                                                <span ng-show="sortType == 'rank' && sortReverse" class="fa fa-caret-up"></span>
+                                            </a>
+                                        </th>
+                						<th>
+                							<a class="header_sort" href="" ng-click="sortType = 'name'; sortReverse = !sortReverse">School Name
+        										<span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
+        										<span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
+        									</a>
+        								</th>
+        								<th>
+                							<a class="header_sort" href="" ng-click="sortType = 'city'; sortReverse = !sortReverse">City
+        										<span ng-show="sortType == 'city' && !sortReverse" class="fa fa-caret-down"></span>
+        										<span ng-show="sortType == 'city' && sortReverse" class="fa fa-caret-up"></span>
+        									</a>
+        								</th>
+        								<th>
+                							<a class="header_sort" href="" ng-click="sortType = 'state'; sortReverse = !sortReverse">State
+        										<span ng-show="sortType == 'state' && !sortReverse" class="fa fa-caret-down"></span>
+        										<span ng-show="sortType == 'state' && sortReverse" class="fa fa-caret-up"></span>
+        									</a>
+        								</th>
+        								<th>
+                							<a class="header_sort" href="" ng-click="sortType = 'campus'; sortReverse = !sortReverse">Campus
+        										<span ng-show="sortType == 'campus' && !sortReverse" class="fa fa-caret-down"></span>
+        										<span ng-show="sortType == 'campus' && sortReverse" class="fa fa-caret-up"></span>
+        									</a>
+        								</th>
+        								<th>
+                							<a class="header_sort" href="" ng-click="sortType = 'public'; sortReverse = !sortReverse">Public or Private
+        										<span ng-show="sortType == 'public' && !sortReverse" class="fa fa-caret-down"></span>
+        										<span ng-show="sortType == 'public' && sortReverse" class="fa fa-caret-up"></span>
+        									</a>
+        								</th>
+                					</tr>
+                				</thead>
 
-        				<div class="input group mb-3">
-        					<select class="custom-select" id="filter_3" ng-model="filter_3" ng-options="x.option for x in sample_opts">
-        						<option value="" disabled selected>User Input 3</option>
-        					</select>
-        				</div>
-
-        				<div class="input group mb-3">
-        					<select class="custom-select" id="filter_4" ng-model="filter_4" ng-options="x.option for x in sample_opts">
-        						<option value="" disabled selected>User Input 4</option>
-        					</select>
-        				</div>
-
-        				<div class="input group mb-3">
-        					<select class="custom-select" id="filter_5" ng-model="filter_5" ng-options="x.option for x in sample_opts">
-        						<option value="" disabled selected>User Input 5</option>
-        					</select>
-        				</div>
-        			</div>
-        		</div>
+                				<tbody>
+                					<tr ng-repeat="univ in sample_univ | orderBy : sortType : sortReverse | filter : search_schools">
+                                        {% verbatim %}
+                                        <td>{{ univ.rank }}</td>
+                						<td>{{ univ.name }}</td>
+                						<td>{{ univ.city }}</td>
+                						<td>{{ univ.state }}</td>
+                						<td>{{ univ.campus }}</td>
+                						<td>{{ univ.public }}</td>
+                                        {% endverbatim %}
+                					</tr>
+                				</tbody>
+                			</table>
+                        </div>
+                    </div>
+                </div>
         	</div>
 
-        	<div class="col-8">
-        		<h3>Content Table</h3>
-
-        		<div class="input-group mb-3">
-  					<div class="input-group-prepend">
-    					<span class="input-group-text" id="search_icon">
-    						<i class="fa fa-search"></i>
-    					</span>
-  					</div>
-  					<input type="text" class="form-control" placeholder="Search for a school" ng-model="search_schools.name" aria-describedby="search_icon">
-				</div>
-
-        		<div class="table-responsive">
-        			<table class="table table-hover table-dark">
-        				<thead>
-        					<tr>
-        						<th>
-        							<a class="header_sort" href="" ng-click="sortType = 'name'; sortReverse = !sortReverse">School Name
-										<span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
-										<span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
-									</a>
-								</th>
-								<th>
-        							<a class="header_sort" href="" ng-click="sortType = 'city'; sortReverse = !sortReverse">City
-										<span ng-show="sortType == 'city' && !sortReverse" class="fa fa-caret-down"></span>
-										<span ng-show="sortType == 'city' && sortReverse" class="fa fa-caret-up"></span>
-									</a>
-								</th>
-								<th>
-        							<a class="header_sort" href="" ng-click="sortType = 'state'; sortReverse = !sortReverse">State
-										<span ng-show="sortType == 'state' && !sortReverse" class="fa fa-caret-down"></span>
-										<span ng-show="sortType == 'state' && sortReverse" class="fa fa-caret-up"></span>
-									</a>
-								</th>
-								<th>
-        							<a class="header_sort" href="" ng-click="sortType = 'campus'; sortReverse = !sortReverse">Campus
-										<span ng-show="sortType == 'campus' && !sortReverse" class="fa fa-caret-down"></span>
-										<span ng-show="sortType == 'campus' && sortReverse" class="fa fa-caret-up"></span>
-									</a>
-								</th>
-								<th>
-        							<a class="header_sort" href="" ng-click="sortType = 'public'; sortReverse = !sortReverse">Public or Private
-										<span ng-show="sortType == 'public' && !sortReverse" class="fa fa-caret-down"></span>
-										<span ng-show="sortType == 'public' && sortReverse" class="fa fa-caret-up"></span>
-									</a>
-								</th>
-        					</tr>
-        				</thead>
-
-        				<tbody>
-        					<tr ng-repeat="univ in sample_univ | orderBy : sortType : sortReverse | filter : search_schools">
-                                {% verbatim %}
-        						<td>{{ univ.name }}</td>
-        						<td>{{ univ.city }}</td>
-        						<td>{{ univ.state }}</td>
-        						<td>{{ univ.campus }}</td>
-        						<td>{{ univ.public }}</td>
-                                {% endverbatim %}
-        					</tr>
-        				</tbody>
-        			</table>
-        		</div>
-        	</div>
+            <div class="col-6" id="graph_col">
+                <script type="text/javascript" src="{%static '/univ_map.js' %}"></script>
+            </div>
 
         	<div class="modal" id="info_modal">
         		<div class="modal-content" id="info_modal_body">
@@ -174,10 +150,8 @@
         			<h5>Information about how our application works</h5>
         		</div>
         	</div>
-        </div>
-
-        <div id="graph_row" class="row center">
-            <script type="text/javascript" src="{%static '/univ_map.js' %}"></script>
+                </div>
+            </div>
         </div>
 
         <script type="text/javascript">
@@ -190,9 +164,9 @@
    				];
 
    				$scope.sample_univ = [
-   					{ name : 'NC State', city : 'Raleigh', state : 'NC', campus : 'Urban', public : 'Public' },
-   					{ name : 'UNC', city : 'Chapel Hill', state : 'NC', campus : 'Urban', public : 'Public' },
-   					{ name : 'Duke', city : 'Durham', state : 'NC', campus : 'Urban', public : 'Private' },
+   					{ rank : 1, name : 'NC State', city : 'Raleigh', state : 'NC', campus : 'Urban', public : 'Public' },
+   					{ rank : 2, name : 'UNC', city : 'Chapel Hill', state : 'NC', campus : 'Urban', public : 'Public' },
+   					{ rank : 3, name : 'Duke', city : 'Durham', state : 'NC', campus : 'Urban', public : 'Private' },
    				]
 
    				$scope.show_info_menu = function() {

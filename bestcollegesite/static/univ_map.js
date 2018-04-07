@@ -1,9 +1,7 @@
-var width = $( window ).width() * 0.90,
+var width = $( window ).width() * 0.50,
 	height = $( window ).height() * 0.75;
 
-	console.log( $( '#graph_row' ).position().top );
-
-var svg = d3.select( "#graph_row" ).append( "svg" )
+var svg = d3.select( "#graph_col" ).append( "svg" )
 	.attr( "width", width )
 	.attr( "height", height );
 
@@ -25,7 +23,7 @@ d3.json( "https://raw.githubusercontent.com/PublicaMundi/MappingAPI/master/data/
 			.attr( "d", path )
 			.style( "stroke", "#000000" )
 			.style( "stroke-width", "1" )
-			.style( "fill", "rgba( 255, 255, 255, 0.2 )" )
+			.style( "fill", "rgba( 255, 255, 255, 0.4 )" )
 			.attr( "id", function( d ) { return d.properties.name; } );
 
 	d3.json( "https://api.data.gov/ed/collegescorecard/v1/schools.json?school.main_campus=1&school.operating=1&school.religious_affiliation=71&school.degrees_awarded.predominant=3&_fields=school.name,location.lat,location.lon,&api_key=MakhOqpDrxhHeP2ZdhQdgEOMApvxyGEW59VEfzYA&per_page=100", function( error, univ ) {
@@ -41,13 +39,14 @@ d3.json( "https://raw.githubusercontent.com/PublicaMundi/MappingAPI/master/data/
 	  			.attr( "cy", function( d ) { return projection( [d['location.lon'], d['location.lat']] )[1]; } )
 	  			.attr( "r", 6 )
 	  			.style( "fill", "#CC0000" )
-	  			.style( "opacity", 0.9 )
-	  			.style( "stroke", "#720000" )
+	  			.style( "opacity", 0.75 )
+	  			.style( "stroke", "#fff" )
 	  			.style( "stroke-width", 0 )
 	  			.on( "mouseover", function( d ) {
 	  				d3.select( this )
 	  					.transition()
 	  					.duration( 250 )
+	  					.attr( "r", 9 )
 	  					.style( "stroke-width", 4 );
 	  				tool.transition()
 	  					.duration( 250 )
@@ -60,6 +59,7 @@ d3.json( "https://raw.githubusercontent.com/PublicaMundi/MappingAPI/master/data/
 		  			d3.select( this )
 	  					.transition()
 	  					.duration( 250 )
+	  					.attr( "r", 6 )
 	  					.style( "stroke-width", 0 );
 		  			tool.transition()
 		  				.duration( 250 )
