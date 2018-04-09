@@ -76,6 +76,16 @@ window.survey = new Survey.Model(json);
 survey.onComplete.add(function(result) {
   document.querySelector('#surveyResult').innerHTML =
     'result: ' + JSON.stringify(result.data);
+  console.log( result.data );
+
+  $.post( '/bestcollege/submit_survey', JSON.stringify( result.data ), function( raw_data ) {
+    var uni_ids = JSON.parse( raw_data );
+    console.log( uni_ids );
+    window.location.replace( 'results' );
+    $.get( 'bestcollege/results_data', JSON.stringify( uni_ids ), function( res_raw_data ) {
+      console.log( res_raw_data );
+    } );
+  } );
 });
 
 $('#surveyElement').Survey({ model: survey });
