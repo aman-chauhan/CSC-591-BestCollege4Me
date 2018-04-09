@@ -108,12 +108,6 @@
         									</a>
         								</th>
         								<th>
-                							<a class="header_sort" href="" ng-click="sortType = 'campus'; sortReverse = !sortReverse">Campus
-        										<span ng-show="sortType == 'campus' && !sortReverse" class="fa fa-caret-down"></span>
-        										<span ng-show="sortType == 'campus' && sortReverse" class="fa fa-caret-up"></span>
-        									</a>
-        								</th>
-        								<th>
                 							<a class="header_sort" href="" ng-click="sortType = 'public'; sortReverse = !sortReverse">Public or Private
         										<span ng-show="sortType == 'public' && !sortReverse" class="fa fa-caret-down"></span>
         										<span ng-show="sortType == 'public' && sortReverse" class="fa fa-caret-up"></span>
@@ -123,14 +117,13 @@
                 				</thead>
 
                 				<tbody>
-                					<tr ng-repeat="univ in sample_univ | orderBy : sortType : sortReverse | filter : search_schools">
+                					<tr ng-repeat="univ in schools | orderBy : sortType : sortReverse | filter : search_schools">
                                         {% verbatim %}
                                         <td>{{ univ.rank }}</td>
                 						<td>{{ univ.name }}</td>
                 						<td>{{ univ.city }}</td>
                 						<td>{{ univ.state }}</td>
-                						<td>{{ univ.campus }}</td>
-                						<td>{{ univ.public }}</td>
+                						<td>{{ univ.ownership }}</td>
                                         {% endverbatim %}
                 					</tr>
                 				</tbody>
@@ -155,19 +148,50 @@
         </div>
 
         <script type="text/javascript">
+            var ids = [];
+            var id_str = "";
         	var app = angular.module( 'angular_app', [] );
 			app.controller( 'angular_ctrl', [ '$scope', '$http', function ( $scope, $http ) {
-    			$scope.sample_opts = [
-        			{ option : "Option 1" },
-        			{ option : "Option 2" },
-        			{ option : "Option 3" }
-   				];
+                $scope.schools = [];
 
-   				$scope.sample_univ = [
-   					{ rank : 1, name : 'NC State', city : 'Raleigh', state : 'NC', campus : 'Urban', public : 'Public' },
-   					{ rank : 2, name : 'UNC', city : 'Chapel Hill', state : 'NC', campus : 'Urban', public : 'Public' },
-   					{ rank : 3, name : 'Duke', city : 'Durham', state : 'NC', campus : 'Urban', public : 'Private' },
-   				]
+                var full_url = window.location.href;
+                var key = "?ids="
+                id_str = full_url.substring( full_url.indexOf( key ) + key.length, full_url.length );
+                var temp_ids = id_str.split( "," )
+                for ( var i = 0; i < temp_ids.length; i++ ) {
+                    ids.push( parseInt( temp_ids[i] ) );
+                    $scope.schools.push( { rank : i + 1, id :parseInt( temp_ids[i] ) } );
+                }
+
+                var base_url = "https://api.data.gov/ed/collegescorecard/v1/schools.json?id=";
+                var req_url = base_url;
+                for ( var i = 0; i < ids.length; i++ ) {
+                    req_url += ( ids[i] + "," )
+                }
+                req_url += "&_fields=id,school.city,school.state,school.name,school.ownership,location.lat,location.lon,&api_key=MakhOqpDrxhHeP2ZdhQdgEOMApvxyGEW59VEfzYA&per_page=100";
+                console.log( req_url );
+                
+                $http.get( req_url )
+                .then( function ( res ) {
+                    console.log( res );
+                    map_builder( res.data );
+
+                    for ( var i = 0; i < res.data.results.length; i++ ) {
+                        for ( var j = 0; j < $scope.schools.length; j++ ) {
+                            if ( res.data.results[i].id == $scope.schools[j].id ) {
+                                $scope.schools[j].name = res.data.results[i]['school.name'];
+                                $scope.schools[j].city = res.data.results[i]['school.city'];
+                                $scope.schools[j].state = res.data.results[i]['school.state'];
+                                if ( res.data.results[i]['school.ownership'] == 1 ) {
+                                    $scope.schools[j].ownership = "Public";
+                                } else if ( res.data.results[i]['school.ownership'] == 2 ) {
+                                    $scope.schools[j].ownership = "Private";
+                                }
+                            }
+                        }
+                    }
+                    console.log( $scope.schools );
+                } );
 
    				$scope.show_info_menu = function() {
    					$( '#info_modal' ).show( 200 );

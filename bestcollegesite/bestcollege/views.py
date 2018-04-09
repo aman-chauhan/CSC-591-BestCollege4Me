@@ -25,9 +25,34 @@ def submit_survey( request ):
 		#using key to find civil war response
 		print data['civilwar']
 
-		uni_ids = [1, 2, 3, 4, 5]
+		##########################################
+		# data var is users survey answers 		 #
+		# use this var to decide on best schools #
+		# IMPORTANT: when schools are decided, 	 #
+		# make a list of their ids IN ORDER		 #
+		# 				and return	 			 #
+		# See the sample list and response below #
+		# This list is used to build the results #
+		# url so that page know what schools to  #
+		# 			  load data for 			 #
+		##########################################
+
+		#for dev testing
+		uni_ids = [199193, 199120, 198419, 228778, 217882, 187620, 243744, 171100, 216597, 228875]
 		return HttpResponse( json.dumps( uni_ids ) )
 
 def results( request ):
+	params = request.GET.get( 'ids', '' )
+	print params
+
+	# uni_ids is now a list of the school's ids matching
+	# the ids in the dataset
+	uni_ids = params.split( ',' )
+
+	# use uni_ids to pull needed data from the dataset
+	# data will likely  be: name, city/state, enrollment/size,
+	# anything else desired in the table
+	# and latitude/longitude for the map
+	
 	template = loader.get_template( 'results.html' )
 	return HttpResponse( template.render() )

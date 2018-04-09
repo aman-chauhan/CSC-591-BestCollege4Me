@@ -81,10 +81,13 @@ survey.onComplete.add(function(result) {
   $.post( '/bestcollege/submit_survey', JSON.stringify( result.data ), function( raw_data ) {
     var uni_ids = JSON.parse( raw_data );
     console.log( uni_ids );
-    window.location.replace( 'results' );
-    $.get( 'bestcollege/results_data', JSON.stringify( uni_ids ), function( res_raw_data ) {
-      console.log( res_raw_data );
-    } );
+    var url_params = '';
+    for ( var i = 0; i < uni_ids.length; i++ ) {
+      url_params += uni_ids[i] + ','
+    }
+
+    url_params = url_params.substring( 0, url_params.length - 1 )
+    window.location.replace( 'results/?ids=' + url_params );
   } );
 });
 
