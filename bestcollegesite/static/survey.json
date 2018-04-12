@@ -1,0 +1,104 @@
+{
+  "pages": [
+    {
+      "name": "page1",
+      "elements": [
+        {
+          "type": "dropdown",
+          "name": "state",
+          "title": "Where are you from?",
+          "isRequired": true,
+          "choices": [
+            "Alabama",
+            "Alaska",
+            "Arizona",
+            "Arkansas",
+            "California",
+            "Colorado",
+            "Connecticut",
+            "Delaware",
+            "Florida",
+            "Georgia",
+            "Hawaii",
+            "Idaho",
+            "Illinois",
+            "Indiana",
+            "Iowa",
+            "Kansas",
+            "Kentucky",
+            "Louisiana",
+            "Maine",
+            "Maryland",
+            "Massachusetts",
+            "Michigan",
+            "Minnesota",
+            "Mississippi",
+            "Missouri",
+            "Montana",
+            "Nebraska",
+            "Nevada",
+            "New Hampshire",
+            "New Jersey",
+            "New Mexico",
+            "New York",
+            "North Carolina",
+            "North Dakota",
+            "Ohio",
+            "Oklahoma",
+            "Oregon",
+            "Pennsylvania",
+            "Rhode Island",
+            "South Carolina",
+            "South Dakota",
+            "Tennessee",
+            "Texas",
+            "Utah",
+            "Vermont",
+            "Virginia",
+            "Washington",
+            "West Virginia",
+            "Wisconsin",
+            "Wyoming"
+          ],
+          "optionsCaption": "Choose a State"
+        },
+        {
+          "type": "text",
+          "name": "question2",
+          "title": "What is your zip code?",
+          "isRequired": true
+        },
+        {
+          "type": "multipletext",
+          "name": "question1",
+          "title": "What are your test scores?",
+          "description": "You may submit either SAT , ACT or Both",
+          "isRequired": true,
+          "items": [
+            {
+              "name": "text1",
+              "title": "SAT"
+            },
+            {
+              "name": "text2",
+              "title": "ACT"
+            }
+          ]
+        },
+        {
+          "type": "radiogroup",
+          "name": "householdIncome",
+          "title": "What is your household income level?",
+          "isRequired": true,
+          "choices": [
+            "< $30,000",
+            "$30,00 - $48,000",
+            "$48,000 - $75,000",
+            "$75,000 - $110,000",
+            "> $110,000"
+          ]
+        }
+      ]
+    }
+  ]
+}
