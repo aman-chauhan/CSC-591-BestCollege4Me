@@ -7,7 +7,6 @@ from django.template import Context, loader
 from django.views.decorators.csrf import csrf_exempt
 import json
 
-
 def index(request):
     template = loader.get_template('index.html')
     return HttpResponse(template.render())
@@ -42,7 +41,10 @@ def submit_survey(request):
         # for dev testing
         uni_ids = [199193, 199120, 198419, 228778, 217882,
                    187620, 243744, 171100, 216597, 228875]
-        return HttpResponse(json.dumps(uni_ids))
+
+        # fill zip using value from survey JSON
+        # example below
+        return HttpResponse( json.dumps( { 'ids' : uni_ids, 'zip' : 28270 } ) )
 
 
 def results(request):
@@ -58,5 +60,5 @@ def results(request):
     # anything else desired in the table
     # and latitude/longitude for the map
 
-    template = loader.get_template('results.html')
-    return HttpResponse(template.render())
+    template = loader.get_template( 'results.html' )
+    return HttpResponse( template.render() )
