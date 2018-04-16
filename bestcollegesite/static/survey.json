@@ -99,6 +99,267 @@
           ]
         }
       ]
+    },
+    {
+      "name": "page2",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "question3",
+          "title": "Are you looking for a main or branch campus?",
+          "choices": [
+            {
+              "value": "item1",
+              "text": "Main"
+            },
+            {
+              "value": "item2",
+              "text": "Branch"
+            },
+            {
+              "value": "item3",
+              "text": "No Preference"
+            }
+          ]
+        },
+        {
+          "type": "radiogroup",
+          "name": "question4",
+          "title": "Are you looking for a public or private school?",
+          "choices": [
+            {
+              "value": "item1",
+              "text": "Public"
+            },
+            {
+              "value": "item2",
+              "text": "Private"
+            },
+            {
+              "value": "item3",
+              "text": "No Preference"
+            }
+          ]
+        },
+        {
+          "type": "radiogroup",
+          "name": "question5",
+          "title": "Are you looking for an online only school?",
+          "choices": [
+            {
+              "value": "item1",
+              "text": "Yes"
+            },
+            {
+              "value": "item2",
+              "text": "No"
+            },
+            {
+              "value": "item3",
+              "text": "No Preference"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "name": "question6",
+          "title": "What is the lowest acceptance rate  you are looking for?",
+          "inputType": "number"
+        }
+      ]
+    },
+    {
+      "name": "page3",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "question7",
+          "title":
+            "Are you looking for a predominant mission or religious affiliation?",
+          "choices": [
+            {
+              "value": "item2",
+              "text": "Yes"
+            },
+            {
+              "value": "item3",
+              "text": "No"
+            }
+          ]
+        },
+        {
+          "type": "dropdown",
+          "name": "question8",
+          "visibleIf": "{question7} = \"item2\"",
+          "title": "If so, which mission or religious affiliation?",
+          "titleLocation": "hidden",
+          "choices": [
+            "American Evangelical Lutheran Church",
+            "African Methodist Episcopal Zion Church",
+            "Assemblies of God Church",
+            "Brethren Church",
+            "Roman Catholic",
+            "Wisconsin Evangelical Lutheran Synod",
+            "Christ and Missionary Alliance Church",
+            "Christian Reformed Church",
+            "Evangelical Congregational Church",
+            "Evangelical Covenant Church of America",
+            "Evangelical Free Church of America",
+            "Evangelical Lutheran Church",
+            "International United Pentecostal Church",
+            "Free Will Baptist Church",
+            "Interdenominational",
+            "Mennonite Brethren Church",
+            "Moravian Church",
+            "North American Baptist",
+            "Pentecostal Holiness Church",
+            "Christian Churches and Churches of Christ",
+            "Reformed Church in America",
+            "Episcopal Church, Reformed",
+            "African Methodist Episcopal",
+            "American Baptist",
+            "American Lutheran",
+            "Baptist",
+            "Christian Methodist Episcopal",
+            "Church of God",
+            "Church of Brethren",
+            "Church of the Nazarene",
+            "Cumberland Presbyterian",
+            "Christian Church (Disciples of Christ)",
+            "Free Methodist",
+            "Friends",
+            "Presbyterian Church (USA)",
+            "Lutheran Church in America",
+            "Lutheran Church - Missouri Synod",
+            "Mennonite Church",
+            "United Methodist",
+            "Protestant Episcopal",
+            "Churches of Christ",
+            "Southern Baptist",
+            "United Church of Christ",
+            "Protestant, not specified",
+            "Multiple Protestant Denomination",
+            "Other Protestant",
+            "Jewish",
+            "Reformed Presbyterian Church",
+            "United Brethren Church",
+            "Missionary Church Inc",
+            "Undenominational",
+            "Wesleyan",
+            "Greek Orthodox",
+            "Russian Orthodox",
+            "Unitarian Universalist",
+            "Latter Day Saints (Mormon Church)",
+            "Seventh Day Adventists",
+            "The Presbyterian Church in America",
+            "Other (none of the above)",
+            "Original Free Will Baptist",
+            "Ecumenical Christian",
+            "Evangelical Christian",
+            "Presbyterian"
+          ],
+          "optionsCaption": "Please choose a mission or religious affiliation"
+        },
+        {
+          "type": "radiogroup",
+          "name": "question9",
+          "title":
+            "Are you looking for a student body with a specific demogrphic?",
+          "choices": [
+            {
+              "value": "item1",
+              "text": "Yes"
+            },
+            {
+              "value": "item2",
+              "text": "No"
+            }
+          ]
+        },
+        {
+          "type": "dropdown",
+          "name": "question10",
+          "visibleIf": "{question9} = \"item1\"",
+          "titleLocation": "hidden",
+          "choices": [
+            "White",
+            "Black",
+            "Hispanic",
+            "Asian",
+            "Asian Pacific Islander"
+          ]
+        },
+        {
+          "type": "radiogroup",
+          "name": "question11",
+          "title":
+            "Would you want classmates who are older or younger than 25?",
+          "choices": [
+            {
+              "value": "item1",
+              "text": "Mostly younger than age 25"
+            },
+            {
+              "value": "item2",
+              "text": "Mostly older than age 25"
+            }
+          ]
+        },
+        {
+          "type": "radiogroup",
+          "name": "question12",
+          "title":
+            "Would you want classmates who go to school full time or part time?",
+          "choices": [
+            {
+              "value": "item1",
+              "text": "Part-time"
+            },
+            {
+              "value": "item2",
+              "text": "Full-time"
+            }
+          ]
+        },
+        {
+          "type": "radiogroup",
+          "name": "question13",
+          "title":
+            "Do you prefer classmates who are first-generation students?",
+          "choices": [
+            {
+              "value": "item1",
+              "text": "Yes"
+            },
+            {
+              "value": "item2",
+              "text": "No"
+            },
+            {
+              "value": "item3",
+              "text": "Doesn't matter"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "page4",
+      "elements": [
+        {
+          "type": "text",
+          "name": "question14",
+          "title":
+            "How much in semester tution are you looking to pay for school?",
+          "inputType": "number"
+        },
+        {
+          "type": "text",
+          "name": "question15",
+          "title":
+            "How much are you anticipating to pay for montly tuition loans?"
+        }
+      ]
     }
   ]
 }
