@@ -169,13 +169,13 @@
                 for ( var i = 0; i < ids.length; i++ ) {
                     req_url += ( ids[i] + "," )
                 }
-                req_url += "&_fields=id,school.city,school.state,school.name,school.ownership,location.lat,location.lon,&api_key=MakhOqpDrxhHeP2ZdhQdgEOMApvxyGEW59VEfzYA&per_page=100";
-                console.log( req_url );
+                req_url += "&_fields=id,school.city,school.state,school.zip,school.name,school.ownership,location.lat,location.lon,&api_key=MakhOqpDrxhHeP2ZdhQdgEOMApvxyGEW59VEfzYA&per_page=100";
+                //console.log( req_url );
                 
+                var data_for_map = {};
                 $http.get( req_url )
                 .then( function ( res ) {
-                    console.log( res );
-                    map_builder( res.data );
+                    data_for_map.school_data = res.data;
 
                     for ( var i = 0; i < res.data.results.length; i++ ) {
                         for ( var j = 0; j < $scope.schools.length; j++ ) {
@@ -183,6 +183,7 @@
                                 $scope.schools[j].name = res.data.results[i]['school.name'];
                                 $scope.schools[j].city = res.data.results[i]['school.city'];
                                 $scope.schools[j].state = res.data.results[i]['school.state'];
+                                $scope.schools[i].zip = res.data.results[i]['school.zip'];
                                 if ( res.data.results[i]['school.ownership'] == 1 ) {
                                     $scope.schools[j].ownership = "Public";
                                 } else if ( res.data.results[i]['school.ownership'] == 2 ) {
@@ -191,32 +192,29 @@
                             }
                         }
                     }
-                    console.log( $scope.schools );
                 } );
 
                 var zip = full_url.substring( full_url.indexOf( zip_key ) + zip_key.length, full_url.length );
-                console.log( zip );
-                /*
+                
                 var google_geo_base = 'https://maps.googleapis.com/maps/api/geocode/json?';
                 var google_geo_api_key = '&key=AIzaSyBNK_Jgc_WcNdyE_pLHR12sfC_rbeIDVXg';
                 
                 var google_geo_url = google_geo_base;
-
-                var street = home_addr.street.split( " " );
-                for ( var i = 0; i < street.length; i++ ) {
-                  google_geo_url += street[i] + '+'
-                }
+                google_geo_url += 'address=' + zip;
                 
 
                 google_geo_url += google_geo_api_key;
-                console.log( google_geo_url );
                 $.get( google_geo_url, function( raw_geo_data ) {
-                  var geo_data = JSON.parse( raw_geo_data );
-                  var home_lon = geo_data.results[0].geometry.location.lng;
-                  var home_lat = geo_data.results[0].geometry.location.lat;
-                  console.log( home_lat + ', ' + home_lon );
+                    //console.log( raw_geo_data )
+
+                    //var geo_data = JSON.parse( raw_geo_data );
+                    var home_lon = raw_geo_data.results[0].geometry.location.lng;
+                    var home_lat = raw_geo_data.results[0].geometry.location.lat;
+                    console.log( home_lat + ', ' + home_lon );
+                    data_for_map.home = [{ lat : home_lat, lon : home_lon }];
+                    map_builder( data_for_map );
                 } );
-                */
+                
    				$scope.show_info_menu = function() {
    					$( '#info_modal' ).show( 200 );
    				}

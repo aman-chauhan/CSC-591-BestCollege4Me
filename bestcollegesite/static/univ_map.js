@@ -30,7 +30,7 @@ function map_builder( ret_data ) {
 		var g = svg.append( "g" );
 
 		g.selectAll( "circle" )
-		  	.data( ret_data.results )
+		  	.data( ret_data.school_data.results )
 		  	.enter()
 		  		.append( "circle" )
 		  		.attr( "class", "circle" )
@@ -66,7 +66,7 @@ function map_builder( ret_data ) {
 			  	} );
 
 		g.selectAll( "text" )
-			.data( [{ lat : 35.097079, lon : -80.773301 }] )
+			.data( ret_data.home )
 			.enter()
 			.append( "text" )
 				.attr( "x", function( d ) { return projection( [d.lon, d.lat] )[0]; } )
