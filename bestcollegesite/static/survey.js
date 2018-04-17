@@ -10,8 +10,7 @@ var json = {
       questions: [
         {
           type: 'html',
-          html:
-            "You are about to start quiz by history. <br/>You have 10 seconds for every page and 25 seconds for the whole survey of 3 questions.<br/>Please click on <b>'Start Quiz'</b> button when you are ready.",
+          html: '** copy here to introduce the survey and its purpose **',
         },
       ],
     },
@@ -76,14 +75,14 @@ window.survey = new Survey.Model(json);
 survey.onComplete.add(function(result) {
   document.querySelector('#surveyResult').innerHTML =
     'result: ' + JSON.stringify(result.data);
-  console.log( result.data );
+  console.log(result.data);
 
   $.post( '/bestcollege/submit_survey', JSON.stringify( result.data ), function( raw_data ) {
     var uni_ids = JSON.parse( raw_data ).ids;
     console.log( uni_ids );
     var url_params = '';
-    for ( var i = 0; i < uni_ids.length; i++ ) {
-      url_params += uni_ids[i] + ','
+    for (var i = 0; i < uni_ids.length; i++) {
+      url_params += uni_ids[i] + ',';
     }
 
     var zip = JSON.parse( raw_data ).zip;
