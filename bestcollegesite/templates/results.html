@@ -184,6 +184,8 @@
                                 $scope.schools[j].city = res.data.results[i]['school.city'];
                                 $scope.schools[j].state = res.data.results[i]['school.state'];
                                 $scope.schools[i].zip = res.data.results[i]['school.zip'];
+                                $scope.schools[i].lat = res.data.results[i]['location.lat'];
+                                $scope.schools[i].lon = res.data.results[i]['location.lon'];
                                 if ( res.data.results[i]['school.ownership'] == 1 ) {
                                     $scope.schools[j].ownership = "Public";
                                 } else if ( res.data.results[i]['school.ownership'] == 2 ) {
@@ -192,28 +194,73 @@
                             }
                         }
                     }
+
+                    load_map();
+                    get_bars( 0 );
                 } );
 
-                var zip = full_url.substring( full_url.indexOf( zip_key ) + zip_key.length, full_url.length );
-                
-                var google_geo_base = 'https://maps.googleapis.com/maps/api/geocode/json?';
-                var google_geo_api_key = '&key=AIzaSyBNK_Jgc_WcNdyE_pLHR12sfC_rbeIDVXg';
-                
-                var google_geo_url = google_geo_base;
-                google_geo_url += 'address=' + zip;
-                
+                function load_map() {
+                    var zip = full_url.substring( full_url.indexOf( zip_key ) + zip_key.length, full_url.length );
+                    
+                    var google_geo_base = 'https://maps.googleapis.com/maps/api/geocode/json?';
+                    var google_geo_api_key = '&key=AIzaSyBNK_Jgc_WcNdyE_pLHR12sfC_rbeIDVXg';
+                    
+                    var google_geo_url = google_geo_base;
+                    google_geo_url += 'address=' + zip;
+                    
 
-                google_geo_url += google_geo_api_key;
-                $.get( google_geo_url, function( raw_geo_data ) {
-                    //console.log( raw_geo_data )
+                    google_geo_url += google_geo_api_key;
+                    $.get( google_geo_url, function( raw_geo_data ) {
+                        var home_lon = raw_geo_data.results[0].geometry.location.lng;
+                        var home_lat = raw_geo_data.results[0].geometry.location.lat;
+                        console.log( home_lat + ', ' + home_lon );
+                        data_for_map.home = [{ lat : home_lat, lon : home_lon }];
+                        map_builder( data_for_map );
+                    } );
+                }
 
-                    //var geo_data = JSON.parse( raw_geo_data );
-                    var home_lon = raw_geo_data.results[0].geometry.location.lng;
-                    var home_lat = raw_geo_data.results[0].geometry.location.lat;
-                    console.log( home_lat + ', ' + home_lon );
-                    data_for_map.home = [{ lat : home_lat, lon : home_lon }];
-                    map_builder( data_for_map );
-                } );
+
+                var google_places_base_url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?radius=3000&types=bar&location=';
+                var google_places_api_key = '&key=AIzaSyAnsbjT7Dm9Qz9Daf8EgmaL1jaovBfV_Hc';
+
+                var get_bars = function( idx ) {
+                    var google_places_url = google_places_base_url;
+                    google_places_url += $scope.schools[idx].lat + ',';
+                    google_places_url += $scope.schools[idx].lon;
+                    $.get( google_places_url + google_places_api_key, function( res ) {
+                        console.log( res.results.length );
+                        $scope.schools[idx].bar_count = res.results.length;
+                        /*
+                        if ( res.results.length > 20  )
+                            get_bar_count( idx, res.next_page_token );
+                        */
+                        if ( idx < $scope.schools.length - 1 )
+                            get_bars( ++idx );
+                        else
+                            get_bar_count;
+                    } );
+                }
+
+                /*
+                var get_bar_count = function() {
+                    var google_places_url = google_places_base_url;
+                    google_places_url += $scope.schools[idx].lat + ',';
+                    google_places_url += $scope.schools[idx].lon;
+                    google_places_url += '&pagetoken=' + token;
+                    var google_places_api_key = '&key=AIzaSyAnsbjT7Dm9Qz9Daf8EgmaL1jaovBfV_Hc';
+                    var has_more = true;
+                    while ( has_more === true ) {
+                        $.get( google_places_url + google_places_api_key, function( res ) {
+                            $scope.schools[idx].bar_count += res.results.length;
+                            if ( 'next_page_token' in res ) {
+                                token = res.next_page_token;
+                            } else {
+                                has_more = false;
+                            }
+                        } )
+                    }
+                }
+                */
                 
    				$scope.show_info_menu = function() {
    					$( '#info_modal' ).show( 200 );
