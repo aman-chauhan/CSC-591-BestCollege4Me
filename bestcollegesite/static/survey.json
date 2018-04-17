@@ -63,6 +63,58 @@
           "optionsCaption": "Choose a State"
         },
         {
+          "type": "radiogroup",
+          "name": "question16",
+          "title": "Are you looking for an in state our out of state school?",
+          "isRequired": true,
+          "choices": [
+            {
+              "value": "item1",
+              "text": "In State"
+            },
+            {
+              "value": "item2",
+              "text": "Out of State"
+            },
+            {
+              "value": "item3",
+              "text": "Both"
+            }
+          ]
+        },
+        {
+          "type": "checkbox",
+          "name": "question17",
+          "visibleIf": "{question16} = \"item2\" or {question16} = \"item3\"",
+          "title": "What region are you looking for schools in?",
+          "choices": [
+            {
+              "value": "item1",
+              "text": "South"
+            },
+            {
+              "value": "item2",
+              "text": "West"
+            },
+            {
+              "value": "item3",
+              "text": "New England"
+            },
+            {
+              "value": "item4",
+              "text": "Mid Atlantic"
+            },
+            {
+              "value": "item5",
+              "text": "Midwest"
+            },
+            {
+              "value": "item6",
+              "text": "Southwest"
+            }
+          ]
+        },
+        {
           "type": "text",
           "name": "question2",
           "title": "What is your zip code?",
@@ -357,7 +409,7 @@
           "type": "text",
           "name": "question15",
           "title":
-            "How much are you anticipating to pay for montly tuition loans?"
+            "How much are you antipiating to pay for montly tuition loans?"
         }
       ]
     }
