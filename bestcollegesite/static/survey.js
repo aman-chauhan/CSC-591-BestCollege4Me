@@ -77,19 +77,20 @@ survey.onComplete.add(function(result) {
     'result: ' + JSON.stringify(result.data);
   console.log(result.data);
 
-  $.post('/bestcollege/submit_survey', JSON.stringify(result.data), function(
-    raw_data
-  ) {
-    var uni_ids = JSON.parse(raw_data);
-    console.log(uni_ids);
+  $.post( '/bestcollege/submit_survey', JSON.stringify( result.data ), function( raw_data ) {
+    var uni_ids = JSON.parse( raw_data ).ids;
+    console.log( uni_ids );
     var url_params = '';
     for (var i = 0; i < uni_ids.length; i++) {
       url_params += uni_ids[i] + ',';
     }
 
-    url_params = url_params.substring(0, url_params.length - 1);
-    window.location.replace('results/?ids=' + url_params);
-  });
+    var zip = JSON.parse( raw_data ).zip;
+
+    url_params = url_params.substring( 0, url_params.length - 1 );
+    console.log( 'results/?ids=' + url_params + '&zip=' + zip );
+    window.location.replace( 'results/?ids=' + url_params + '&zip=' + zip );
+  } );
 });
 
 $('#surveyElement').Survey({ model: survey });

@@ -155,8 +155,9 @@
                 $scope.schools = [];
 
                 var full_url = window.location.href;
-                var key = "?ids="
-                id_str = full_url.substring( full_url.indexOf( key ) + key.length, full_url.length );
+                var id_key = "?ids=";
+                var zip_key = "&zip=";
+                id_str = full_url.substring( full_url.indexOf( id_key ) + id_key.length, full_url.indexOf( zip_key ) );
                 var temp_ids = id_str.split( "," )
                 for ( var i = 0; i < temp_ids.length; i++ ) {
                     ids.push( parseInt( temp_ids[i] ) );
@@ -193,6 +194,29 @@
                     console.log( $scope.schools );
                 } );
 
+                var zip = full_url.substring( full_url.indexOf( zip_key ) + zip_key.length, full_url.length );
+                console.log( zip );
+                /*
+                var google_geo_base = 'https://maps.googleapis.com/maps/api/geocode/json?';
+                var google_geo_api_key = '&key=AIzaSyBNK_Jgc_WcNdyE_pLHR12sfC_rbeIDVXg';
+                
+                var google_geo_url = google_geo_base;
+
+                var street = home_addr.street.split( " " );
+                for ( var i = 0; i < street.length; i++ ) {
+                  google_geo_url += street[i] + '+'
+                }
+                
+
+                google_geo_url += google_geo_api_key;
+                console.log( google_geo_url );
+                $.get( google_geo_url, function( raw_geo_data ) {
+                  var geo_data = JSON.parse( raw_geo_data );
+                  var home_lon = geo_data.results[0].geometry.location.lng;
+                  var home_lat = geo_data.results[0].geometry.location.lat;
+                  console.log( home_lat + ', ' + home_lon );
+                } );
+                */
    				$scope.show_info_menu = function() {
    					$( '#info_modal' ).show( 200 );
    				}
