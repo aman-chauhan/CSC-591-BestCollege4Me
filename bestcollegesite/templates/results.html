@@ -220,47 +220,62 @@
                 }
 
 
-                var google_places_base_url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?radius=3000&types=bar&location=';
+                var google_places_base_url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?radius=2400&types=bar&location=';
                 var google_places_api_key = '&key=AIzaSyAnsbjT7Dm9Qz9Daf8EgmaL1jaovBfV_Hc';
 
+                var bar_tokens = [];
                 var get_bars = function( idx ) {
                     var google_places_url = google_places_base_url;
                     google_places_url += $scope.schools[idx].lat + ',';
                     google_places_url += $scope.schools[idx].lon;
                     $.get( google_places_url + google_places_api_key, function( res ) {
-                        console.log( res.results.length );
+                        //console.log( res.results.length );
                         $scope.schools[idx].bar_count = res.results.length;
-                        /*
-                        if ( res.results.length > 20  )
-                            get_bar_count( idx, res.next_page_token );
-                        */
+
+                        if ( 'next_page_token' in res  )
+                            bar_tokens.push( { [idx] : res.next_page_token } );
+
                         if ( idx < $scope.schools.length - 1 )
                             get_bars( ++idx );
                         else
-                            get_bar_count;
+                            get_bar_count( 0, bar_tokens[0][Object.keys( bar_tokens[0] )[0]] );
+                        
                     } );
                 }
 
-                /*
-                var get_bar_count = function() {
+                var get_bar_count = function( i, token ) {
+                    var idx = Object.keys( bar_tokens[i] )[0];
                     var google_places_url = google_places_base_url;
                     google_places_url += $scope.schools[idx].lat + ',';
                     google_places_url += $scope.schools[idx].lon;
                     google_places_url += '&pagetoken=' + token;
-                    var google_places_api_key = '&key=AIzaSyAnsbjT7Dm9Qz9Daf8EgmaL1jaovBfV_Hc';
-                    var has_more = true;
-                    while ( has_more === true ) {
-                        $.get( google_places_url + google_places_api_key, function( res ) {
+
+                    $.get( google_places_url + google_places_api_key, function( res ) {
+                        //console.log( google_places_url + google_places_api_key );
+                        //console.log( res );
+                        if ( res.status === "INVALID_REQUEST" ) {
+                            console.log( idx );
+                            if ( i < bar_tokens.length - 1 ) {
+                                i++;
+                                get_bar_count( i, bar_tokens[i][Object.keys( bar_tokens[i] )[0]] );
+                            } else {
+                                console.log( $scope.schools );
+                            }
+                        } else {
                             $scope.schools[idx].bar_count += res.results.length;
                             if ( 'next_page_token' in res ) {
-                                token = res.next_page_token;
+                                get_bar_count( i, res.next_page_token );
                             } else {
-                                has_more = false;
+                                if ( i < bar_tokens.length - 1 ) {
+                                    i++;
+                                    get_bar_count( i, bar_tokens[i][Object.keys( bar_tokens[i] )[0]] );
+                                } else {
+                                    console.log( $scope.schools );
+                                }
                             }
-                        } )
-                    }
+                        }
+                    } );
                 }
-                */
                 
    				$scope.show_info_menu = function() {
    					$( '#info_modal' ).show( 200 );
