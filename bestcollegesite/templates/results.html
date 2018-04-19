@@ -68,7 +68,7 @@
                 <div class="card mx-auto">
                     <div class="card-header">Results</div>
                     <div class="card-body">
-                        <h5 class="card-title">Content Table</h5>
+                        <h5 class="card-title">Results Table</h5>
 
                 		<div class="input-group mb-3">
           					<div class="input-group-prepend">
@@ -102,11 +102,9 @@
         									</a>
         								</th>
         								<th>
-                							<a class="header_sort" href="">State
-        									</a>
-        								</th>
-        								<th>
-                							<a class="header_sort" href="">Public or Private
+                							<a class="header_sort" href="" ng-click="sortType = 'state'; sortReverse = !sortReverse">State
+                                                <span ng-show="sortType == 'state' && !sortReverse" class="fa fa-caret-down"></span>
+                                                <span ng-show="sortType == 'state' && sortReverse" class="fa fa-caret-up"></span>
         									</a>
         								</th>
                 					</tr>
@@ -119,7 +117,6 @@
                 						<td>{{ univ.name }}</td>
                 						<td>{{ univ.city }}</td>
                 						<td>{{ univ.state }}</td>
-                						<td>{{ univ.ownership }}</td>
                                         {% endverbatim %}
                 					</tr>
                 				</tbody>
@@ -239,11 +236,19 @@
                         //console.log( res.results.length );
                         bar_rank[idx] = { count : res.results.length };
                         bar_rank[idx].id = $scope.schools[idx].id;
+                        bar_rank[idx].name = $scope.schools[idx].name;
                         var sum = 0;
+                        var valid_count = 0;
                         for ( var i = 0; i < res.results.length; i++ ) {
-                            sum += distance_from_bar( res.results[i].geometry.location.lat, res.results[i].geometry.location.lng, $scope.schools[idx].lat, $scope.schools[idx].lon );
+                            if ( res.results[i].rating != undefined ) {
+                                sum += res.results[i].rating;
+                                valid_count++;
+                            }
                         }
-                        bar_rank[idx].avg_distance = sum / res.results.length;
+
+                        bar_rank[idx].avg_rating = sum / valid_count;
+
+                        bar_rank[idx].value = ( ( bar_rank[idx].count / 20.0 ) + ( bar_rank[idx].avg_rating / 5.0 ) ) / 2.0;
 
                         if ( idx < $scope.schools.length - 1 )
                             get_bars( ++idx );
@@ -257,9 +262,8 @@
                 }
 
                 function mergesort( bar_list ) {
-                    if ( bar_list.length === 1 ) {
+                    if ( bar_list.length === 1 )
                         return bar_list;
-                    }
 
                     var mid = Math.floor( bar_list.length / 2 );
                     var left = bar_list.slice( 0, mid );
@@ -274,6 +278,7 @@
                     var res = [];
 
                     while ( i < left.length && j < right.length ) {
+                        /*
                         if ( left[i].count > right[j].count ) {
                             res.push( left[i] );
                             i++;
@@ -281,7 +286,7 @@
                             res.push( right[j] );
                             j++;
                         } else {
-                            if ( left[i].avg_distance < right[j].avg_distance ) {
+                            if ( left[i].avg_rating > right[j].avg_rating ) {
                                 res.push( left[i] );
                                 i++;
                             }
@@ -289,6 +294,14 @@
                                 res.push( right[j] );
                                 j++;
                             }
+                        }
+                        */
+                        if ( left[i].value > right[j].value ) {
+                            res.push( left[i] );
+                            i++;
+                        } else {
+                            res.push( right[j] );
+                            j++;
                         }
                     }
 
@@ -305,19 +318,6 @@
                     return res;
                 }
 
-                function distance_from_bar( lat1, lon1, lat2, lon2 ) {
-                    var r_earth = 6371.0;
-                    var d_lat = deg_to_rad( lat2 - lat1 );
-                    var d_lon = deg_to_rad( lon2 - lon1 );
-                    var temp1 = Math.sin( d_lat / 2.0 ) * Math.sin( d_lat / 2.0 ) + Math.cos( deg_to_rad( lat1 ) ) * Math.cos( deg_to_rad( lat2 ) ) * Math.sin( d_lon / 2.0 ) * Math.sin( d_lon / 2.0 );
-                    var temp2 = 2.0 * Math.atan2( Math.sqrt( temp1 ), Math.sqrt( 1.0 - temp1 ) );
-                    return r_earth * temp2;
-                }
-
-                function deg_to_rad( deg ) {
-                    return deg * ( Math.PI / 180.0 );
-                }
-
    				$scope.show_info_menu = function() {
    					$( '#info_modal' ).show( 200 );
    				}
@@ -327,10 +327,10 @@
                         for ( var j = 0; j < $scope.schools.length; j++ ) {
                             if ( bar_rank[i].id === $scope.schools[j].id ) {
                                 var temp = $scope.schools[i];
-                                temp.rank = j + 1;
                                 $scope.schools[i] = $scope.schools[j];
                                 $scope.schools[i].rank = i + 1;
                                 $scope.schools[j] = temp;
+                                $scope.schools[j].rank = j + 1;
                             }
                         }
                     }
