@@ -102,15 +102,11 @@
         									</a>
         								</th>
         								<th>
-                							<a class="header_sort" href="" ng-click="sortType = 'state'; sortReverse = !sortReverse">State
-        										<span ng-show="sortType == 'state' && !sortReverse" class="fa fa-caret-down"></span>
-        										<span ng-show="sortType == 'state' && sortReverse" class="fa fa-caret-up"></span>
+                							<a class="header_sort" href="">State
         									</a>
         								</th>
         								<th>
-                							<a class="header_sort" href="" ng-click="sortType = 'public'; sortReverse = !sortReverse">Public or Private
-        										<span ng-show="sortType == 'public' && !sortReverse" class="fa fa-caret-down"></span>
-        										<span ng-show="sortType == 'public' && sortReverse" class="fa fa-caret-up"></span>
+                							<a class="header_sort" href="">Public or Private
         									</a>
         								</th>
                 					</tr>
@@ -128,6 +124,17 @@
                 					</tr>
                 				</tbody>
                 			</table>
+                        </div>
+                        <br>
+                        <div id="sort_btns" class="btn-toolbar" role="toolbar">
+                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                <label class="btn btn-dark active" ng-click="sort_by_night()">
+                                    <input type="radio" name="options" autocomplete="off" checked>Sort by Nightlife
+                                </label>
+                                <label class="btn btn-dark active" ng-click="sort_by_crime()">
+                                    <input type="radio" name="options" autocomplete="off">Sort by Crime
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -223,63 +230,111 @@
                 var google_places_base_url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?radius=2400&types=bar&location=';
                 var google_places_api_key = '&key=AIzaSyAnsbjT7Dm9Qz9Daf8EgmaL1jaovBfV_Hc';
 
-                var bar_tokens = [];
-                var get_bars = function( idx ) {
+                var bar_rank = [];
+                var get_bars = function( idx ) { 
                     var google_places_url = google_places_base_url;
                     google_places_url += $scope.schools[idx].lat + ',';
                     google_places_url += $scope.schools[idx].lon;
                     $.get( google_places_url + google_places_api_key, function( res ) {
                         //console.log( res.results.length );
-                        $scope.schools[idx].bar_count = res.results.length;
-
-                        if ( 'next_page_token' in res  )
-                            bar_tokens.push( { [idx] : res.next_page_token } );
+                        bar_rank[idx] = { count : res.results.length };
+                        bar_rank[idx].id = $scope.schools[idx].id;
+                        var sum = 0;
+                        for ( var i = 0; i < res.results.length; i++ ) {
+                            sum += distance_from_bar( res.results[i].geometry.location.lat, res.results[i].geometry.location.lng, $scope.schools[idx].lat, $scope.schools[idx].lon );
+                        }
+                        bar_rank[idx].avg_distance = sum / res.results.length;
 
                         if ( idx < $scope.schools.length - 1 )
                             get_bars( ++idx );
-                        else
-                            get_bar_count( 0, bar_tokens[0][Object.keys( bar_tokens[0] )[0]] );
+                        else {
+                            bar_rank = mergesort( bar_rank.slice() ).slice();
+                            console.log( bar_rank );
+                            $( '#sort_btns' ).show( 250 );
+                        }
                         
                     } );
                 }
 
-                var get_bar_count = function( i, token ) {
-                    var idx = Object.keys( bar_tokens[i] )[0];
-                    var google_places_url = google_places_base_url;
-                    google_places_url += $scope.schools[idx].lat + ',';
-                    google_places_url += $scope.schools[idx].lon;
-                    google_places_url += '&pagetoken=' + token;
+                function mergesort( bar_list ) {
+                    if ( bar_list.length === 1 ) {
+                        return bar_list;
+                    }
 
-                    $.get( google_places_url + google_places_api_key, function( res ) {
-                        //console.log( google_places_url + google_places_api_key );
-                        //console.log( res );
-                        if ( res.status === "INVALID_REQUEST" ) {
-                            console.log( idx );
-                            if ( i < bar_tokens.length - 1 ) {
-                                i++;
-                                get_bar_count( i, bar_tokens[i][Object.keys( bar_tokens[i] )[0]] );
-                            } else {
-                                console.log( $scope.schools );
-                            }
+                    var mid = Math.floor( bar_list.length / 2 );
+                    var left = bar_list.slice( 0, mid );
+                    var right = bar_list.slice( mid );
+                    
+                    return mergesort_helper( mergesort( left ), mergesort( right ) );
+                }
+
+                function mergesort_helper( left, right ) {
+                    var i = 0;
+                    var j = 0;
+                    var res = [];
+
+                    while ( i < left.length && j < right.length ) {
+                        if ( left[i].count > right[j].count ) {
+                            res.push( left[i] );
+                            i++;
+                        } else if ( right[j].count > left[i].count ) {
+                            res.push( right[j] );
+                            j++;
                         } else {
-                            $scope.schools[idx].bar_count += res.results.length;
-                            if ( 'next_page_token' in res ) {
-                                get_bar_count( i, res.next_page_token );
-                            } else {
-                                if ( i < bar_tokens.length - 1 ) {
-                                    i++;
-                                    get_bar_count( i, bar_tokens[i][Object.keys( bar_tokens[i] )[0]] );
-                                } else {
-                                    console.log( $scope.schools );
-                                }
+                            if ( left[i].avg_distance < right[j].avg_distance ) {
+                                res.push( left[i] );
+                                i++;
+                            }
+                            else {
+                                res.push( right[j] );
+                                j++;
                             }
                         }
-                    } );
+                    }
+
+                    while ( i < left.length ) {
+                        res.push( left[i] );
+                        i++;
+                    }
+
+                    while ( j < right.length ) {
+                        res.push( right[j] );
+                        j++;
+                    }
+
+                    return res;
                 }
-                
+
+                function distance_from_bar( lat1, lon1, lat2, lon2 ) {
+                    var r_earth = 6371.0;
+                    var d_lat = deg_to_rad( lat2 - lat1 );
+                    var d_lon = deg_to_rad( lon2 - lon1 );
+                    var temp1 = Math.sin( d_lat / 2.0 ) * Math.sin( d_lat / 2.0 ) + Math.cos( deg_to_rad( lat1 ) ) * Math.cos( deg_to_rad( lat2 ) ) * Math.sin( d_lon / 2.0 ) * Math.sin( d_lon / 2.0 );
+                    var temp2 = 2.0 * Math.atan2( Math.sqrt( temp1 ), Math.sqrt( 1.0 - temp1 ) );
+                    return r_earth * temp2;
+                }
+
+                function deg_to_rad( deg ) {
+                    return deg * ( Math.PI / 180.0 );
+                }
+
    				$scope.show_info_menu = function() {
    					$( '#info_modal' ).show( 200 );
    				}
+
+                $scope.sort_by_night = function() {
+                    for ( var i = 0; i < bar_rank.length; i++ ) {
+                        for ( var j = 0; j < $scope.schools.length; j++ ) {
+                            if ( bar_rank[i].id === $scope.schools[j].id ) {
+                                var temp = $scope.schools[i];
+                                temp.rank = j + 1;
+                                $scope.schools[i] = $scope.schools[j];
+                                $scope.schools[i].rank = i + 1;
+                                $scope.schools[j] = temp;
+                            }
+                        }
+                    }
+                }
 
 			} ] );
 
@@ -291,6 +346,7 @@
 				$( '#info_modal' ).hide();
 				$( '#info_modal_body' ).width( $( window ).width() * 0.35 );
 				$( '#info_modal_body' ).height( $( window ).height() * 0.45 );
+                $( '#sort_btns' ).hide();
 			}
 
 			if ( !window.isLoaded ) {
