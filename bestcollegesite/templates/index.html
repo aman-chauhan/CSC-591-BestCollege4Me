@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">
+		
+		<!-- font awesome icons -->
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/solid.css" integrity="sha384-v2Tw72dyUXeU3y4aM2Y0tBJQkGfplr39mxZqlTBDUZAb9BGoC40+rdFCG0m10lXk" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/fontawesome.css" integrity="sha384-q3jl8XQu1OpdLgGFvNRnPdj5VIlCvgsDQTQB6owSOHWlAurxul7f+JpUOVdAiJ5P" crossorigin="anonymous">
+		
+		<!-- my css -->
+        {% load static %}
+		<link rel="stylesheet" href="{%static 'style/style.css' %}">
+
+		<!-- jQuery library -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		
+		<!-- Latest compiled Bootstrap CSS -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.css">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.js"></script>
+
+		<!-- Latest compiled JavaScript -->
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-route.min.js"></script>
+		
+		<meta charset="UTF-8">
+		<title>What College is Best for Me?</title>
+    
+	</head>
+	<body class="home_body" ng-app="angular_app" ng-controller="angular_ctrl">
+		<nav id="top_nav" class="navbar navbar-expand-lg navbar-light bg-light">
+			<a class="navbar-brand" href="#">What College is Best for Me?</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    			<span class="navbar-toggler-icon"></span>
+  			</button>
+
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item active">
+						<a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+					</li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'survey' %}">Get Started <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'results' %}">Results Page for dev work<span class="sr-only">(current)</span></a>
+                    </li>
+				</ul>
+
+				<ul class="nav justify-content-end">
+					<li class="nav-item">
+						<a class="nav-link active" href="#" ng-click="show_info_menu()">
+							<span>
+								<i class="fa fa-lg fa-question-circle"></i>
+							</span>
+						</a>
+					</li>
+				</ul>
+			</div>
+        </nav>
+
+        <header class="masthead text-center text-white d-flex">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-10 mx-auto">
+                        <h1 class="text-uppercase">
+                            <strong>What College is the best fit for you?</strong>
+                        </h1>
+                        <hr>
+                    </div>
+
+                    <div class="col-lg-8 mx-auto">
+                        <p class="text-faded mb-5">Feeling overwhelmed searching for the right college? We can help you narrow down your search. Start by clicking the button below!</p>
+
+                        <a id="start_btn" class="btn btn-primary btn-xl" href="{% url 'survey' %}">Start Now</a>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <div class="modal" id="info_modal">
+        	<div class="modal-content" id="info_modal_body">
+        		<span class="close">&times;</span>
+        		<h5>FAQ</h5>
+        	</div>
+        </div>
+
+        <script type="text/javascript">
+        	var app = angular.module( 'angular_app', [] );
+			app.controller( 'angular_ctrl', [ '$scope', '$http', function ( $scope, $http ) {
+    			
+
+   				$scope.show_info_menu = function() {
+   					$( '#info_modal' ).show( 200 );
+   				}
+
+			} ] );
+
+			$( '.close' ).click( function() {
+				$( this ).parent().parent().hide( 250 );
+			} );
+
+			function on_page_load() {
+				$( '#info_modal' ).hide();
+				$( '#info_modal_body' ).width( $( window ).width() * 0.35 );
+				$( '#info_modal_body' ).height( $( window ).height() * 0.45 );
+			}
+
+			if ( !window.isLoaded ) {
+				window.addEventListener( "load", function() {
+					on_page_load();
+				}, false );
+			} else {
+				on_page_load();
+			}
+        </script>
+	</body>
+
+</html>

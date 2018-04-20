@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">
+		
+		<!-- font awesome icons -->
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/solid.css" integrity="sha384-v2Tw72dyUXeU3y4aM2Y0tBJQkGfplr39mxZqlTBDUZAb9BGoC40+rdFCG0m10lXk" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/fontawesome.css" integrity="sha384-q3jl8XQu1OpdLgGFvNRnPdj5VIlCvgsDQTQB6owSOHWlAurxul7f+JpUOVdAiJ5P" crossorigin="anonymous">
+		
+		<!-- my css -->
+        {% load static %}
+		<link rel="stylesheet" href="{%static 'style/style.css' %}">
+
+		<!-- jQuery library -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		
+		<!-- Latest compiled Bootstrap CSS -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.css">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.js"></script>
+
+		<!-- Latest compiled JavaScript -->
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-route.min.js"></script>
+
+        <!-- latest d3 visualization library -->
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+		
+		<meta charset="UTF-8">
+		<title>What College is Best for Me?</title>
+    
+	</head>
+	<body class="home_body" ng-app="angular_app" ng-controller="angular_ctrl">
+		<nav id="top_nav" class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">What College is Best for Me?</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'index' %}">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'survey' %}">Get Started <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'results' %}">Results Page for dev work<span class="sr-only">(current)</span></a>
+                    </li>
+                </ul>
+
+                <ul class="nav justify-content-end">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#" ng-click="show_info_menu()">
+                            <span>
+                                <i class="fa fa-lg fa-question-circle"></i>
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        
+        <div class="row custom_gutter">
+        	<div class="col-6">
+                <div class="card mx-auto">
+                    <div class="card-header">Results</div>
+                    <div class="card-body">
+                        <h5 class="card-title">Results Table</h5>
+
+                		<div class="input-group mb-3">
+          					<div class="input-group-prepend">
+            					<span class="input-group-text" id="search_icon">
+            						<i class="fa fa-search"></i>
+            					</span>
+          					</div>
+          					<input type="text" class="form-control" placeholder="Search for a school" ng-model="search_schools.name" aria-describedby="search_icon">
+        				</div>
+
+                		<div class="table-responsive">
+                			<table class="table table-hover table-dark">
+                				<thead>
+                					<tr>
+                                        <th>
+                                            <a class="header_sort" href="" ng-click="sortType = 'rank'; sortReverse = !sortReverse">Rank
+                                                <span ng-show="sortType == 'rank' && !sortReverse" class="fa fa-caret-down"></span>
+                                                <span ng-show="sortType == 'rank' && sortReverse" class="fa fa-caret-up"></span>
+                                            </a>
+                                        </th>
+                						<th>
+                							<a class="header_sort" href="" ng-click="sortType = 'name'; sortReverse = !sortReverse">School Name
+        										<span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
+        										<span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
+        									</a>
+        								</th>
+        								<th>
+                							<a class="header_sort" href="" ng-click="sortType = 'city'; sortReverse = !sortReverse">City
+        										<span ng-show="sortType == 'city' && !sortReverse" class="fa fa-caret-down"></span>
+        										<span ng-show="sortType == 'city' && sortReverse" class="fa fa-caret-up"></span>
+        									</a>
+        								</th>
+        								<th>
+                							<a class="header_sort" href="" ng-click="sortType = 'state'; sortReverse = !sortReverse">State
+                                                <span ng-show="sortType == 'state' && !sortReverse" class="fa fa-caret-down"></span>
+                                                <span ng-show="sortType == 'state' && sortReverse" class="fa fa-caret-up"></span>
+        									</a>
+        								</th>
+                					</tr>
+                				</thead>
+
+                				<tbody>
+                					<tr ng-repeat="univ in schools | orderBy : sortType : sortReverse | filter : search_schools">
+                                        {% verbatim %}
+                                        <td>{{ univ.rank }}</td>
+                						<td>{{ univ.name }}</td>
+                						<td>{{ univ.city }}</td>
+                						<td>{{ univ.state }}</td>
+                                        {% endverbatim %}
+                					</tr>
+                				</tbody>
+                			</table>
+                        </div>
+                        <br>
+                        <div id="sort_btns" class="btn-toolbar" role="toolbar">
+                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                <label class="btn btn-dark active" ng-click="sort_by_night()">
+                                    <input type="radio" name="options" autocomplete="off" checked>Sort by Nightlife
+                                </label>
+                                <label class="btn btn-dark active" ng-click="sort_by_crime()">
+                                    <input type="radio" name="options" autocomplete="off">Sort by Crime
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        	</div>
+
+            <div class="col-6" id="graph_col">
+                <script type="text/javascript" src="{%static '/univ_map.js' %}"></script>
+            </div>
+
+        	<div class="modal" id="info_modal">
+        		<div class="modal-content" id="info_modal_body">
+        			<span class="close">&times;</span>
+        			<h5>Information about how our application works</h5>
+        		</div>
+        	</div>
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            var ids = [];
+            var id_str = "";
+        	var app = angular.module( 'angular_app', [] );
+			app.controller( 'angular_ctrl', [ '$scope', '$http', function ( $scope, $http ) {
+                $scope.schools = [];
+
+                var full_url = window.location.href;
+                var id_key = "?ids=";
+                var zip_key = "&zip=";
+                id_str = full_url.substring( full_url.indexOf( id_key ) + id_key.length, full_url.indexOf( zip_key ) );
+                var temp_ids = id_str.split( "," )
+                for ( var i = 0; i < temp_ids.length; i++ ) {
+                    ids.push( parseInt( temp_ids[i] ) );
+                    $scope.schools.push( { rank : i + 1, id :parseInt( temp_ids[i] ) } );
+                }
+
+                var base_url = "https://api.data.gov/ed/collegescorecard/v1/schools.json?id=";
+                var req_url = base_url;
+                for ( var i = 0; i < ids.length; i++ ) {
+                    req_url += ( ids[i] + "," )
+                }
+                req_url += "&_fields=id,school.city,school.state,school.zip,school.name,school.ownership,location.lat,location.lon,&api_key=MakhOqpDrxhHeP2ZdhQdgEOMApvxyGEW59VEfzYA&per_page=100";
+                //console.log( req_url );
+                
+                var data_for_map = {};
+                $http.get( req_url )
+                .then( function ( res ) {
+                    data_for_map.school_data = res.data;
+
+                    for ( var i = 0; i < res.data.results.length; i++ ) {
+                        for ( var j = 0; j < $scope.schools.length; j++ ) {
+                            if ( res.data.results[i].id == $scope.schools[j].id ) {
+                                $scope.schools[j].name = res.data.results[i]['school.name'];
+                                $scope.schools[j].city = res.data.results[i]['school.city'];
+                                $scope.schools[j].state = res.data.results[i]['school.state'];
+                                $scope.schools[j].zip = res.data.results[i]['school.zip'];
+                                $scope.schools[j].lat = res.data.results[i]['location.lat'];
+                                $scope.schools[j].lon = res.data.results[i]['location.lon'];
+                                if ( res.data.results[i]['school.ownership'] == 1 ) {
+                                    $scope.schools[j].ownership = "Public";
+                                } else if ( res.data.results[i]['school.ownership'] == 2 ) {
+                                    $scope.schools[j].ownership = "Private";
+                                }
+                            }
+                        }
+                    }
+
+                    load_map();
+                    get_bars( 0 );
+                } );
+
+                function load_map() {
+                    var zip = full_url.substring( full_url.indexOf( zip_key ) + zip_key.length, full_url.length );
+                    
+                    var google_geo_base = 'https://maps.googleapis.com/maps/api/geocode/json?';
+                    var google_geo_api_key = '&key=AIzaSyBNK_Jgc_WcNdyE_pLHR12sfC_rbeIDVXg';
+                    
+                    var google_geo_url = google_geo_base;
+                    google_geo_url += 'address=' + zip;
+                    
+
+                    google_geo_url += google_geo_api_key;
+                    $.get( google_geo_url, function( raw_geo_data ) {
+                        var home_lon = raw_geo_data.results[0].geometry.location.lng;
+                        var home_lat = raw_geo_data.results[0].geometry.location.lat;
+                        console.log( home_lat + ', ' + home_lon );
+                        data_for_map.home = [{ lat : home_lat, lon : home_lon }];
+                        map_builder( data_for_map );
+                    } );
+                }
+
+
+                var google_places_base_url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?radius=2500&types=bar&location=';
+                var google_places_api_key = '&key=AIzaSyAnsbjT7Dm9Qz9Daf8EgmaL1jaovBfV_Hc';
+
+                var bar_rank = [];
+                var get_bars = function( idx ) { 
+                    var google_places_url = google_places_base_url;
+                    //console.log( $scope.schools[idx].name );
+                    google_places_url += $scope.schools[idx].lat + ',';
+                    google_places_url += $scope.schools[idx].lon;
+                    $.get( google_places_url + google_places_api_key, function( res ) {
+                        //console.log( res.results.length );
+                        bar_rank[idx] = { count : res.results.length };
+                        bar_rank[idx].id = $scope.schools[idx].id;
+                        bar_rank[idx].name = $scope.schools[idx].name;
+                        console.log( $scope.schools[idx].name + ' ' + google_places_url + google_places_api_key );
+                        var sum = 0;
+                        var valid_count = 0;
+                        for ( var i = 0; i < res.results.length; i++ ) {
+                            if ( res.results[i].rating != undefined ) {
+                                sum += res.results[i].rating;
+                                valid_count++;
+                            }
+                        }
+
+                        bar_rank[idx].avg_rating = sum / valid_count;
+
+                        bar_rank[idx].value = ( ( bar_rank[idx].count / 20.0 ) + ( bar_rank[idx].avg_rating / 5.0 ) ) / 2.0;
+
+                        if ( idx < $scope.schools.length - 1 )
+                            get_bars( ++idx );
+                        else {
+                            console.log( bar_rank );
+                            bar_rank = mergesort( bar_rank.slice() ).slice();
+                            console.log( bar_rank );
+                            $( '#sort_btns' ).show( 250 );
+                        }
+                        
+                    } );
+                }
+
+                function mergesort( bar_list ) {
+                    if ( bar_list.length === 1 )
+                        return bar_list;
+
+                    var mid = Math.floor( bar_list.length / 2 );
+                    var left = bar_list.slice( 0, mid );
+                    var right = bar_list.slice( mid );
+                    
+                    return mergesort_helper( mergesort( left ), mergesort( right ) );
+                }
+
+                function mergesort_helper( left, right ) {
+                    var i = 0;
+                    var j = 0;
+                    var res = [];
+
+                    while ( i < left.length && j < right.length ) {
+                        /*
+                        if ( left[i].count > right[j].count ) {
+                            res.push( left[i] );
+                            i++;
+                        } else if ( right[j].count > left[i].count ) {
+                            res.push( right[j] );
+                            j++;
+                        } else {
+                            if ( left[i].avg_rating > right[j].avg_rating ) {
+                                res.push( left[i] );
+                                i++;
+                            }
+                            else {
+                                res.push( right[j] );
+                                j++;
+                            }
+                        }
+                        */
+                        if ( left[i].value > right[j].value ) {
+                            res.push( left[i] );
+                            i++;
+                        } else {
+                            res.push( right[j] );
+                            j++;
+                        }
+                    }
+
+                    while ( i < left.length ) {
+                        res.push( left[i] );
+                        i++;
+                    }
+
+                    while ( j < right.length ) {
+                        res.push( right[j] );
+                        j++;
+                    }
+
+                    return res;
+                }
+
+   				$scope.show_info_menu = function() {
+   					$( '#info_modal' ).show( 200 );
+   				}
+
+                $scope.sort_by_night = function() {
+                    for ( var i = 0; i < bar_rank.length; i++ ) {
+                        for ( var j = 0; j < $scope.schools.length; j++ ) {
+                            if ( bar_rank[i].id === $scope.schools[j].id ) {
+                                var temp = $scope.schools[i];
+                                $scope.schools[i] = $scope.schools[j];
+                                $scope.schools[i].rank = i + 1;
+                                $scope.schools[j] = temp;
+                                $scope.schools[j].rank = j + 1;
+                            }
+                        }
+                    }
+                }
+
+			} ] );
+
+			$( '.close' ).click( function() {
+				$( this ).parent().parent().hide( 250 );
+			} );
+
+			function on_page_load() {
+				$( '#info_modal' ).hide();
+				$( '#info_modal_body' ).width( $( window ).width() * 0.35 );
+				$( '#info_modal_body' ).height( $( window ).height() * 0.45 );
+                $( '#sort_btns' ).hide();
+			}
+
+			if ( !window.isLoaded ) {
+				window.addEventListener( "load", function() {
+					on_page_load();
+				}, false );
+			} else {
+				on_page_load();
+			}
+        </script>
+	</body>
+
+</html>
