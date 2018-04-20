@@ -21,10 +21,10 @@ def survey(request):
 def submit_survey(request):
     if request.method == 'POST':
         # survey as json
-        data = json.loads(request.body.decode('utf-8'))
+        survey_response = json.loads(request.body.decode('utf-8'))
 
         # using key to find civil war response
-        print(data['civilwar'])
+        print ( survey_response )
 
         ##########################################
         # data var is users survey answers 		 #
