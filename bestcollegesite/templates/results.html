@@ -187,9 +187,9 @@
                                 $scope.schools[j].name = res.data.results[i]['school.name'];
                                 $scope.schools[j].city = res.data.results[i]['school.city'];
                                 $scope.schools[j].state = res.data.results[i]['school.state'];
-                                $scope.schools[i].zip = res.data.results[i]['school.zip'];
-                                $scope.schools[i].lat = res.data.results[i]['location.lat'];
-                                $scope.schools[i].lon = res.data.results[i]['location.lon'];
+                                $scope.schools[j].zip = res.data.results[i]['school.zip'];
+                                $scope.schools[j].lat = res.data.results[i]['location.lat'];
+                                $scope.schools[j].lon = res.data.results[i]['location.lon'];
                                 if ( res.data.results[i]['school.ownership'] == 1 ) {
                                     $scope.schools[j].ownership = "Public";
                                 } else if ( res.data.results[i]['school.ownership'] == 2 ) {
@@ -224,12 +224,13 @@
                 }
 
 
-                var google_places_base_url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?radius=2400&types=bar&location=';
+                var google_places_base_url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?radius=2500&types=bar&location=';
                 var google_places_api_key = '&key=AIzaSyAnsbjT7Dm9Qz9Daf8EgmaL1jaovBfV_Hc';
 
                 var bar_rank = [];
                 var get_bars = function( idx ) { 
                     var google_places_url = google_places_base_url;
+                    //console.log( $scope.schools[idx].name );
                     google_places_url += $scope.schools[idx].lat + ',';
                     google_places_url += $scope.schools[idx].lon;
                     $.get( google_places_url + google_places_api_key, function( res ) {
@@ -237,6 +238,7 @@
                         bar_rank[idx] = { count : res.results.length };
                         bar_rank[idx].id = $scope.schools[idx].id;
                         bar_rank[idx].name = $scope.schools[idx].name;
+                        console.log( $scope.schools[idx].name + ' ' + google_places_url + google_places_api_key );
                         var sum = 0;
                         var valid_count = 0;
                         for ( var i = 0; i < res.results.length; i++ ) {
@@ -253,6 +255,7 @@
                         if ( idx < $scope.schools.length - 1 )
                             get_bars( ++idx );
                         else {
+                            console.log( bar_rank );
                             bar_rank = mergesort( bar_rank.slice() ).slice();
                             console.log( bar_rank );
                             $( '#sort_btns' ).show( 250 );
