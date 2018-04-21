@@ -69,6 +69,10 @@ def apply_knn(user_input={}, user_filters={}):
   #Dropping all the columns in the drop list
   df_knn.drop(cols_to_drop, axis=1, inplace=True)
 
+  #returning if not enough colleges left upon filtering
+  if df_knn.shape[0] < 1:
+    return []
+
   #Standardizing the data
   sc, df_knn_sc = standardize_data(df_knn) 
 
