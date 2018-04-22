@@ -64,7 +64,7 @@
         },
         {
           "type": "radiogroup",
-          "name": "question16",
+          "name": "stateschool",
           "title": "Are you looking for an in state our out of state school?",
           "isRequired": true,
           "choices": [
@@ -84,7 +84,7 @@
         },
         {
           "type": "checkbox",
-          "name": "question17",
+          "name": "region",
           "visibleIf": "{question16} = \"item2\" or {question16} = \"item3\"",
           "title": "What region are you looking for schools in?",
           "choices": [
@@ -116,7 +116,7 @@
         },
         {
           "type": "text",
-          "name": "question2",
+          "name": "zipCode",
           "title": "What is your zip code?",
           "isRequired": true
         },
@@ -141,7 +141,7 @@
         },
         {
           "type": "radiogroup",
-          "name": "question19",
+          "name": "genderExclusive",
           "title": "Are you looking for a gender exclusive school?",
           "choices": [
             {
@@ -160,7 +160,7 @@
         },
         {
           "type": "multipletext",
-          "name": "question1",
+          "name": "testScores",
           "title": "What are your test scores?",
           "description": "You may submit either SAT , ACT or Both",
           "isRequired": true,
@@ -195,7 +195,7 @@
       "elements": [
         {
           "type": "radiogroup",
-          "name": "question3",
+          "name": "campusType",
           "title": "Are you looking for a main or branch campus?",
           "choices": [
             {
@@ -214,7 +214,7 @@
         },
         {
           "type": "radiogroup",
-          "name": "question4",
+          "name": "publicPrivate",
           "title": "Are you looking for a public or private school?",
           "choices": [
             {
@@ -233,7 +233,7 @@
         },
         {
           "type": "radiogroup",
-          "name": "question5",
+          "name": "onlineOnly",
           "title": "Are you looking for an online only school?",
           "choices": [
             {
@@ -252,7 +252,7 @@
         },
         {
           "type": "text",
-          "name": "question6",
+          "name": "acceptanceRate",
           "title": "What is the lowest acceptance rate  you are looking for?",
           "inputType": "number"
         }
@@ -263,7 +263,7 @@
       "elements": [
         {
           "type": "radiogroup",
-          "name": "question7",
+          "name": "religion",
           "title":
             "Are you looking for a predominant mission or religious affiliation?",
           "choices": [
@@ -279,7 +279,7 @@
         },
         {
           "type": "dropdown",
-          "name": "question8",
+          "name": "religionType",
           "visibleIf": "{question7} = \"item2\"",
           "title": "If so, which mission or religious affiliation?",
           "titleLocation": "hidden",
@@ -352,7 +352,7 @@
         },
         {
           "type": "dropdown",
-          "name": "question20",
+          "name": "userDemographic",
           "title": "Which demographic best describes you?",
           "choices": [
             "White",
@@ -366,7 +366,7 @@
         },
         {
           "type": "radiogroup",
-          "name": "question9",
+          "name": "demographicPreference",
           "title":
             "Are you looking for a student body with a specific demogrphic?",
           "choices": [
@@ -382,7 +382,7 @@
         },
         {
           "type": "dropdown",
-          "name": "question10",
+          "name": "demographicType",
           "visibleIf": "{question9} = \"item1\"",
           "titleLocation": "hidden",
           "choices": [
@@ -396,7 +396,7 @@
         },
         {
           "type": "radiogroup",
-          "name": "question11",
+          "name": "age25",
           "title":
             "Would you want classmates who are older or younger than 25?",
           "choices": [
@@ -412,7 +412,7 @@
         },
         {
           "type": "radiogroup",
-          "name": "question12",
+          "name": "timeStatus",
           "title":
             "Would you want classmates who go to school full time or part time?",
           "choices": [
@@ -428,7 +428,7 @@
         },
         {
           "type": "radiogroup",
-          "name": "question13",
+          "name": "financialAid",
           "title": "Do you require financial aid?",
           "choices": [
             {
@@ -452,14 +452,14 @@
       "elements": [
         {
           "type": "text",
-          "name": "question14",
+          "name": "semesterTuition",
           "title":
             "How much in semester tution are you looking to pay for school?",
           "inputType": "number"
         },
         {
           "type": "text",
-          "name": "question15",
+          "name": "monthlyLoans",
           "title":
             "How much are you antipiating to pay for montly tuition loans?"
         }
