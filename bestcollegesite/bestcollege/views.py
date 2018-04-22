@@ -80,19 +80,19 @@ def submit_survey(request):
         ##########################################
 
         sat = None
-        if survey_response['testScores'].contains( 'text1' ) :
+        if survey_response['testScores'].has_key( 'text1' ) :
             sat = survey_response['testScores']['SAT_AVG']
 
         act = None
-        if survey_response['testScores'].contains( 'text2' ) :
+        if survey_response['testScores'].has_key( 'text2' ) :
             act = survey_response['testScores']['ACTCMID'] 
 
         dem = None
-        if survey_response.contains( 'demographicType' ):
+        if survey_response.has_key( 'demographicType' ):
             dem = survey_response['demographicType']
 
         #Applying KNN to find the best colleges for the user
-        user_input = { 'HIGHDEG' : 4, 'SAT_AVG' : sat, 'ACTCMID' : act, 'UGDS_WHITE' : get_demographic( dem, UGDS_WHITE ), 'UGDS_BLACK' : get_demographic( dem, UGDS_BLACK ),
+        user_input = { 'HIGHDEG' : 4, 'SAT_AVG' : sat, 'ACTCMID' : act, 'UGDS_WHITE' : get_demographic( dem, 'UGDS_WHITE' ), 'UGDS_BLACK' : get_demographic( dem, 'UGDS_BLACK' ),
             'UGDS_HISP' : get_demographic( dem, 'UGDS_HISP' ), 'UGDS_ASIAN' : get_demographic( dem, 'UGDS_ASIAN' ), 'UGDS_AIAN' : get_demographic( dem, 'UGDS_AIAN' ),
             'UGDS_NHPI' : get_demographic( dem, 'UGDS_NHPI' ), 'UGDS_2MOR' : 0, 'UGDS_NRA' : 0, 'UGDS_UNKN' : 0,
             'UG25ABV' : survey_response['UG25ABV'], 'PPTUG_EF' : survey_response['PPTUG_EF'], 'INC_PCT_LO' : get_income_range( survey_response['householdIncome'], 'INC_PCT_LO' ),
@@ -122,13 +122,13 @@ def submit_survey(request):
                 women_only = 1
 
         states = []
-        if survey_response.contains( 'region' ):
+        if survey_response.has_key( 'region' ):
             states = get_states_from_regions( survey_response['region'] )
         else:
             states.append( survey_response['STABBR'] )
 
         historic_type = None
-        if survey_response.contains( 'historicType' ):
+        if survey_response.has_key( 'historicType' ):
             historic_type = survey_response['historicType']
 
 
