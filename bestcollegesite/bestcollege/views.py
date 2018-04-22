@@ -9,13 +9,12 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 
 def get_states_from_regions( regions ):
-    region_map = { 'South' : ['Arkansas', 'North Carolina', 'South Carolina', 'Georgia', 'Florida', 'Alabama', 'Mississippi', 'Kentucky', 'Tennessee', 'Louisiana', 'Virginia', 'West Virginia'],
-  'West' : ['California', 'Oregon', 'Wyoming', 'Nevada', 'Washington'],
-  'New England' : ['New Hampshire', 'Connecticut', 'Massachusets', 'Vermont', 'Rhode Island', 'Maine'],
-  'Mid Atlantic' : ['Delaware', 'Maryland', 'New Jersey', 'New York', 'Pennsylvania'],
-  'Midwest' : ['Illinois', 'Indiana', 'Iowa', 'Kansas', 'Michigan', 'Minnesota', 'Missouri', 'Nebraska', 'North Dakota', 'Ohio', 'South Dakota', 'Wisconsin'],
-  'Southwest' : ['Arizona', 'New Mexico', 'Oklahoma', 'Texas'],
-  'West' : ['Alaska', 'Colorado', 'California', 'Hawaii', 'Idaho', 'Montana', 'Nevada', 'Oregon', 'Utah', 'Washington', 'Wyoming'] }
+    region_map = { 'south' : ['Arkansas', 'North Carolina', 'South Carolina', 'Georgia', 'Florida', 'Alabama', 'Mississippi', 'Kentucky', 'Tennessee', 'Louisiana', 'Virginia', 'West Virginia'],
+  'newEngland' : ['New Hampshire', 'Connecticut', 'Massachusets', 'Vermont', 'Rhode Island', 'Maine'],
+  'midAtlantic' : ['Delaware', 'Maryland', 'New Jersey', 'New York', 'Pennsylvania'],
+  'midwest' : ['Illinois', 'Indiana', 'Iowa', 'Kansas', 'Michigan', 'Minnesota', 'Missouri', 'Nebraska', 'North Dakota', 'Ohio', 'South Dakota', 'Wisconsin'],
+  'southwest' : ['Arizona', 'New Mexico', 'Oklahoma', 'Texas'],
+  'west' : ['Alaska', 'Colorado', 'California', 'Hawaii', 'Idaho', 'Montana', 'Nevada', 'Oregon', 'Utah', 'Washington', 'Wyoming'] }
     states = []
     for region in regions:
         for state in region_map[region]:
@@ -80,15 +79,15 @@ def submit_survey(request):
         ##########################################
 
         sat = None
-        if survey_response['testScores'].has_key( 'text1' ) :
+        if 'SAT_AVG' in survey_response['testScores']:
             sat = survey_response['testScores']['SAT_AVG']
 
         act = None
-        if survey_response['testScores'].has_key( 'text2' ) :
+        if 'ACTCMID' in survey_response['testScores']:
             act = survey_response['testScores']['ACTCMID'] 
 
         dem = None
-        if survey_response.has_key( 'demographicType' ):
+        if 'demographicType' in survey_response:
             dem = survey_response['demographicType']
 
         #Applying KNN to find the best colleges for the user
@@ -122,27 +121,26 @@ def submit_survey(request):
                 women_only = 1
 
         states = []
-        if survey_response.has_key( 'region' ):
+        if 'region' in survey_response:
             states = get_states_from_regions( survey_response['region'] )
         else:
             states.append( survey_response['STABBR'] )
 
         historic_type = None
-        if survey_response.has_key( 'historicType' ):
+        if 'historicType' in survey_response:
             historic_type = survey_response['historicType']
 
 
         user_filters = { 'ADM_RATE' : [survey_response['acceptanceRate'] / 100.0, 1], 'UGDS' : get_student_body_size( survey_response['studentBodySize'] ),
         'TUITIONFEE_IN' : tuition_in, 'TUITIONFEE_OUT' : tuition_out, 'STABBR' : states, 'MAIN' : survey_response['MAIN'], 'CONTROL' : survey_response['CONTROL'],
-        RELAFFIL : None, 'DISTANCEONLY' : survey_response['DISTANCEONLY'], 'HBCU': get_historic( historic_type, 'HBCU' ), 'PBI': get_historic( historic_type, 'PBI' ),
+        'RELAFFIL' : None, 'DISTANCEONLY' : survey_response['DISTANCEONLY'], 'HBCU': get_historic( historic_type, 'HBCU' ), 'PBI': get_historic( historic_type, 'PBI' ),
         'ANNHI': get_historic( historic_type, 'ANNHI' ), 'HSI': get_historic( historic_type, 'HSI' ), 'NANTI': get_historic( historic_type, 'NANTI' ),
         'MENONLY': men_only, 'WOMENONLY': women_only, 'CIP14BACHL': 1, 'GRAD_DEBT_MDN10YR': [0,survey_response['monthlyLoans']] }
 
         unit_ids = apply_knn(user_input, user_filters)
 
         # for dev testing
-        uni_ids = [199193, 199120, 198419, 228778, 217882,
-                   187620, 243744, 171100, 216597, 228875]
+        uni_ids = [199193, 139959, 198419, 228778, 217882, 100858, 243744, 171100, 216597, 228875]
 
         # fill zip using value from survey JSON
         # example below
@@ -164,3 +162,18 @@ def results(request):
 
     template = loader.get_template( 'results.html' )
     return HttpResponse( template.render() )
+
+@csrf_exempt
+def sort_results( request ):
+    # should be map of nightlife scores
+    # keys are unitids of schools
+    if request.method == 'POST':
+        # survey as json
+        nightlife_scores = json.loads( request.body.decode( 'utf-8' ) )
+        print ( nightlife_scores )
+
+    # sorting done here
+
+    # fake new sorted map
+    unit_ids = [139959, 228875, 198419, 199193, 228778, 100858, 217882, 243744, 171100, 216597]
+    return HttpResponse( json.dumps( { 'ids' : unit_ids } ) )
