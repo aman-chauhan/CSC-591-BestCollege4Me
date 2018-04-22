@@ -121,6 +121,44 @@
           "isRequired": true
         },
         {
+          "type": "dropdown",
+          "name": "question18",
+          "title": "What is your gender?",
+          "choices": [
+            {
+              "value": "item1",
+              "text": "Male"
+            },
+            {
+              "value": "item2",
+              "text": "Female"
+            },
+            {
+              "value": "item3",
+              "text": "Other"
+            }
+          ]
+        },
+        {
+          "type": "radiogroup",
+          "name": "question19",
+          "title": "Are you looking for a gender exclusive school?",
+          "choices": [
+            {
+              "value": "item1",
+              "text": "Yes"
+            },
+            {
+              "value": "item2",
+              "text": "No"
+            },
+            {
+              "value": "item3",
+              "text": "No Preference"
+            }
+          ]
+        },
+        {
           "type": "multipletext",
           "name": "question1",
           "title": "What are your test scores?",
@@ -313,6 +351,20 @@
           "optionsCaption": "Please choose a mission or religious affiliation"
         },
         {
+          "type": "dropdown",
+          "name": "question20",
+          "title": "Which demographic best describes you?",
+          "choices": [
+            "White",
+            "Black",
+            "Hispanic",
+            "Asian",
+            "Asian Pacific Islander",
+            "Tribal",
+            "Prefer not to say"
+          ]
+        },
+        {
           "type": "radiogroup",
           "name": "question9",
           "title":
@@ -338,7 +390,8 @@
             "Black",
             "Hispanic",
             "Asian",
-            "Asian Pacific Islander"
+            "Asian Pacific Islander",
+            "Tribal"
           ]
         },
         {
@@ -376,8 +429,7 @@
         {
           "type": "radiogroup",
           "name": "question13",
-          "title":
-            "Do you prefer classmates who are first-generation students?",
+          "title": "Do you require financial aid?",
           "choices": [
             {
               "value": "item1",
@@ -389,7 +441,7 @@
             },
             {
               "value": "item3",
-              "text": "Doesn't matter"
+              "text": "Not sure"
             }
           ]
         }
