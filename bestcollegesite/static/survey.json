@@ -64,7 +64,7 @@
         },
         {
           "type": "radiogroup",
-          "name": "stateschool",
+          "name": "stateSchool",
           "title": "Are you looking for an in state our out of state school?",
           "isRequired": true,
           "choices": [
@@ -85,7 +85,8 @@
         {
           "type": "checkbox",
           "name": "region",
-          "visibleIf": "{question16} = \"item2\" or {question16} = \"item3\"",
+          "visibleIf":
+            "{stateSchool} = \"outOfState\" or {stateSchool} = \"both\"",
           "title": "What region are you looking for schools in?",
           "choices": [
             {
@@ -281,7 +282,7 @@
         {
           "type": "dropdown",
           "name": "RELAFFIL",
-          "visibleIf": "{question7} = \"item2\"",
+          "visibleIf": "{religion} = \"yes\"",
           "title": "If so, which mission or religious affiliation?",
           "titleLocation": "hidden",
           "choices": [
@@ -384,7 +385,7 @@
         {
           "type": "dropdown",
           "name": "demographicType",
-          "visibleIf": "{question9} = \"item1\"",
+          "visibleIf": "{demographicPreference} = \"yes\"",
           "titleLocation": "hidden",
           "choices": [
             "White",
