@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+from model_knn import apply_knn
 
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
@@ -15,6 +16,10 @@ def index(request):
 def survey(request):
     template = loader.get_template('survey.html')
     return HttpResponse(template.render())
+
+
+
+
 
 
 @csrf_exempt
@@ -37,6 +42,11 @@ def submit_survey(request):
         # url so that page know what schools to  #
         # 			  load data for 			 #
         ##########################################
+
+        #Applying KNN to find the best colleges for the user
+        user_input = {}
+        user_filters = {}
+        unit_ids = apply_knn(user_input, user_filters)
 
         # for dev testing
         uni_ids = [199193, 199120, 198419, 228778, 217882,
