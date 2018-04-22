@@ -21,7 +21,7 @@ def isFloat(x):
         return False
 
 def main():
-    rawpath="../raws/CollegeScorecard_Raw_Data"
+    rawpath="/Users/achauhan/Downloads/CollegeScorecard_Raw_Data"
     data={}
     global_attrs=None
     files=[f for f in os.listdir(rawpath) if (os.path.isfile(os.path.join(rawpath,f)) and not f.startswith('.'))]
@@ -58,12 +58,12 @@ def main():
                 print("\r",end="")
                 print("["+"#"*(progress)+" "*(plen-progress)+"]",end="")
 
-    with open('../data/attributes.txt','w') as fp:
-        s="\n".join(global_attrs)
-        fp.write(s)
+    #with open('../data/attributes.txt','w') as fp:
+    #    s="\n".join(global_attrs)
+    #    fp.write(s)
 
     print("\nWriting the data to disk...")
-    with open('../data/combined.csv','w') as fp:
+    with open('../combined.csv','w') as fp:
         s=",".join(global_attrs)
         fp.write(s+"\n")
         for id in sorted(data.keys()):
