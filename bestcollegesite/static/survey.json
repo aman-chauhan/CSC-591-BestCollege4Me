@@ -146,15 +146,15 @@
           "title": "Are you looking for a gender exclusive school?",
           "choices": [
             {
-              "value": "yes",
+              "value": true,
               "text": "Yes"
             },
             {
-              "value": "no",
+              "value": false,
               "text": "No"
             },
             {
-              "value": "noPreference",
+              "value": false,
               "text": "No Preference"
             }
           ]
@@ -398,6 +398,35 @@
         },
         {
           "type": "radiogroup",
+          "name": "historicAssociation",
+          "title":
+            "Are you looking for a school with a specific historical association?",
+          "choices": [
+            {
+              "value": "yes",
+              "text": "Yes"
+            },
+            {
+              "value": null,
+              "text": "No"
+            }
+          ]
+        },
+        {
+          "type": "dropdown",
+          "name": "historicType",
+          "visibleIf": "{historicAssociation} = \"yes\"",
+          "titleLocation": "hidden",
+          "choices": [
+            "HBCU",
+            "PBI",
+            "ANNHI",
+            "HSI",
+            "NANTI"
+          ]
+        },
+        {
+          "type": "radiogroup",
           "name": "UG25ABV",
           "title":
             "Would you want classmates who are older or younger than 25?",
@@ -453,6 +482,18 @@
       "name": "page4",
       "elements": [
         {
+          "type": "radiogroup",
+          "name": "studentBodySize",
+          "title": "What sized student body are you looking for?",
+          "isRequired": true,
+          "choices": [
+            "Very small",
+            "Small",
+            "Medium",
+            "Large"
+          ]
+        }
+        {
           "type": "text",
           "name": "semesterTuition",
           "title":
@@ -463,7 +504,8 @@
           "type": "text",
           "name": "monthlyLoans",
           "title":
-            "How much are you antipiating to pay for montly tuition loans?"
+            "How much are you antipiating to pay for montly tuition loans?",
+          "inputType" : "number"
         }
       ]
     }
