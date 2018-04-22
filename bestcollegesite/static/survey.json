@@ -5,60 +5,60 @@
       "elements": [
         {
           "type": "dropdown",
-          "name": "state",
+          "name": "STABBR",
           "title": "Where are you from?",
           "isRequired": true,
           "choices": [
-            "Alabama",
-            "Alaska",
-            "Arizona",
-            "Arkansas",
-            "California",
-            "Colorado",
-            "Connecticut",
-            "Delaware",
-            "Florida",
-            "Georgia",
-            "Hawaii",
-            "Idaho",
-            "Illinois",
-            "Indiana",
-            "Iowa",
-            "Kansas",
-            "Kentucky",
-            "Louisiana",
-            "Maine",
-            "Maryland",
-            "Massachusetts",
-            "Michigan",
-            "Minnesota",
-            "Mississippi",
-            "Missouri",
-            "Montana",
-            "Nebraska",
-            "Nevada",
-            "New Hampshire",
-            "New Jersey",
-            "New Mexico",
-            "New York",
-            "North Carolina",
-            "North Dakota",
-            "Ohio",
-            "Oklahoma",
-            "Oregon",
-            "Pennsylvania",
-            "Rhode Island",
-            "South Carolina",
-            "South Dakota",
-            "Tennessee",
-            "Texas",
-            "Utah",
-            "Vermont",
-            "Virginia",
-            "Washington",
-            "West Virginia",
-            "Wisconsin",
-            "Wyoming"
+            "AL",
+            "AK",
+            "AZ",
+            "AR",
+            "CA",
+            "CO",
+            "CT",
+            "DE",
+            "FL",
+            "GA",
+            "HI",
+            "ID",
+            "IL",
+            "IN",
+            "IA",
+            "KS",
+            "KY",
+            "LA",
+            "ME",
+            "MD",
+            "MA",
+            "MI",
+            "MN",
+            "MS",
+            "MO",
+            "MT",
+            "NE",
+            "NV",
+            "NH",
+            "NJ",
+            "NM",
+            "NY",
+            "NC",
+            "ND",
+            "OH",
+            "OK",
+            "OR",
+            "PA",
+            "RI",
+            "SC",
+            "SD",
+            "TN",
+            "TX",
+            "UT",
+            "VT",
+            "VA",
+            "WA",
+            "WV",
+            "WI",
+            "WY"
           ],
           "optionsCaption": "Choose a State"
         },
@@ -69,15 +69,15 @@
           "isRequired": true,
           "choices": [
             {
-              "value": "item1",
+              "value": "inState",
               "text": "In State"
             },
             {
-              "value": "item2",
+              "value": "outOfState",
               "text": "Out of State"
             },
             {
-              "value": "item3",
+              "value": "both",
               "text": "Both"
             }
           ]
@@ -89,27 +89,27 @@
           "title": "What region are you looking for schools in?",
           "choices": [
             {
-              "value": "item1",
+              "value": "south",
               "text": "South"
             },
             {
-              "value": "item2",
+              "value": "west",
               "text": "West"
             },
             {
-              "value": "item3",
+              "value": "newEngland",
               "text": "New England"
             },
             {
-              "value": "item4",
+              "value": "midAtlantic",
               "text": "Mid Atlantic"
             },
             {
-              "value": "item5",
+              "value": "midwest",
               "text": "Midwest"
             },
             {
-              "value": "item6",
+              "value": "southwest",
               "text": "Southwest"
             }
           ]
@@ -122,19 +122,19 @@
         },
         {
           "type": "dropdown",
-          "name": "question18",
+          "name": "gender",
           "title": "What is your gender?",
           "choices": [
             {
-              "value": "item1",
+              "value": "male",
               "text": "Male"
             },
             {
-              "value": "item2",
+              "value": "female",
               "text": "Female"
             },
             {
-              "value": "item3",
+              "value": "other",
               "text": "Other"
             }
           ]
@@ -145,15 +145,15 @@
           "title": "Are you looking for a gender exclusive school?",
           "choices": [
             {
-              "value": "item1",
+              "value": "yes",
               "text": "Yes"
             },
             {
-              "value": "item2",
+              "value": "no",
               "text": "No"
             },
             {
-              "value": "item3",
+              "value": "noPreference",
               "text": "No Preference"
             }
           ]
@@ -166,11 +166,11 @@
           "isRequired": true,
           "items": [
             {
-              "name": "text1",
+              "name": "SAT_AVG",
               "title": "SAT"
             },
             {
-              "name": "text2",
+              "name": "ACTCMID",
               "title": "ACT"
             }
           ]
@@ -195,57 +195,57 @@
       "elements": [
         {
           "type": "radiogroup",
-          "name": "campusType",
+          "name": "MAIN",
           "title": "Are you looking for a main or branch campus?",
           "choices": [
             {
-              "value": "item1",
+              "value": 1,
               "text": "Main"
             },
             {
-              "value": "item2",
+              "value": 0,
               "text": "Branch"
             },
             {
-              "value": "item3",
+              "value": null,
               "text": "No Preference"
             }
           ]
         },
         {
           "type": "radiogroup",
-          "name": "publicPrivate",
+          "name": "CONTROL",
           "title": "Are you looking for a public or private school?",
           "choices": [
             {
-              "value": "item1",
+              "value": 1,
               "text": "Public"
             },
             {
-              "value": "item2",
+              "value": 0,
               "text": "Private"
             },
             {
-              "value": "item3",
+              "value": null,
               "text": "No Preference"
             }
           ]
         },
         {
           "type": "radiogroup",
-          "name": "onlineOnly",
+          "name": "DISTANCEONLY",
           "title": "Are you looking for an online only school?",
           "choices": [
             {
-              "value": "item1",
+              "value": 1,
               "text": "Yes"
             },
             {
-              "value": "item2",
+              "value": 0,
               "text": "No"
             },
             {
-              "value": "item3",
+              "value": null,
               "text": "No Preference"
             }
           ]
@@ -253,7 +253,8 @@
         {
           "type": "text",
           "name": "acceptanceRate",
-          "title": "What is the lowest acceptance rate  you are looking for?",
+          "title":
+            "What is the lowest acceptance rate  you are looking for? (in terms of percent)",
           "inputType": "number"
         }
       ]
@@ -268,18 +269,18 @@
             "Are you looking for a predominant mission or religious affiliation?",
           "choices": [
             {
-              "value": "item2",
+              "value": "yes",
               "text": "Yes"
             },
             {
-              "value": "item3",
+              "value": null,
               "text": "No"
             }
           ]
         },
         {
           "type": "dropdown",
-          "name": "religionType",
+          "name": "RELAFFIL",
           "visibleIf": "{question7} = \"item2\"",
           "title": "If so, which mission or religious affiliation?",
           "titleLocation": "hidden",
@@ -371,11 +372,11 @@
             "Are you looking for a student body with a specific demogrphic?",
           "choices": [
             {
-              "value": "item1",
+              "value": "yes",
               "text": "Yes"
             },
             {
-              "value": "item2",
+              "value": null,
               "text": "No"
             }
           ]
@@ -396,32 +397,32 @@
         },
         {
           "type": "radiogroup",
-          "name": "age25",
+          "name": "UG25ABV",
           "title":
             "Would you want classmates who are older or younger than 25?",
           "choices": [
             {
-              "value": "item1",
+              "value": 0,
               "text": "Mostly younger than age 25"
             },
             {
-              "value": "item2",
+              "value": 1,
               "text": "Mostly older than age 25"
             }
           ]
         },
         {
           "type": "radiogroup",
-          "name": "timeStatus",
+          "name": "PPTUG_EF",
           "title":
             "Would you want classmates who go to school full time or part time?",
           "choices": [
             {
-              "value": "item1",
+              "value": 1,
               "text": "Part-time"
             },
             {
-              "value": "item2",
+              "value": 0,
               "text": "Full-time"
             }
           ]
@@ -432,15 +433,15 @@
           "title": "Do you require financial aid?",
           "choices": [
             {
-              "value": "item1",
+              "value": "yes",
               "text": "Yes"
             },
             {
-              "value": "item2",
+              "value": "no",
               "text": "No"
             },
             {
-              "value": "item3",
+              "value": null,
               "text": "Not sure"
             }
           ]
