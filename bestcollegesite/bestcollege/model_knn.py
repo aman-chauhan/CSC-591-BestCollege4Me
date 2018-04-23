@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
@@ -15,27 +16,34 @@ def standardize_data(df_sc):
   return sc, df_sc
 
 #Method to apply PCA
-def apply_pca(df_pca):
-  pca = PCA(n_components=10)
+def apply_pca(df_pca, n):
+  pca = PCA(n_components=n)
   df_pca = pca.fit_transform(df_pca)
   return pca, df_pca
 
 #Fitting KNN
 def apply_knn(user_input={}, user_filters={}):
-  df = pd.read_csv("cleaned_data.csv")
-
+  SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
+  df = pd.read_csv(SITE_ROOT+"/data/cleaned_data.csv")
   #Temporary input values for now, 
   #can get rid of these once we have an input coming in from the Survey page
-  user_input = {'HIGHDEG': 4, 'SAT_AVG': 1500, 'ACTCMMID': 32, 'UGDS_WHITE': 1, 'UGDS_BLACK': 0, 
-  'UGDS_HISP': 0, 'UGDS_ASIAN': 0, 'UGDS_AIAN': 0, 'UGDS_NHPI': 0, 'UGDS_2MOR': 0, 'UGDS_NRA': 0, 
-  'UGDS_UNKN': 0, 'UG25ABV': 0, 'PPTUG_EF': 0, 'INC_PCT_LO': 0 , 'INC_PCT_M1': 0, 'INC_PCT_M2': 1, 
-  'INC_PCT_H1': 0, 'INC_PCT_H2': 0, 'PAR_ED_PCT_1STGEN': 0, 'C150_4': 1, 'PCIP14': 1}
+  # user_input = {'HIGHDEG': 4, 'SAT_AVG': 1500, 'ACTCMMID': 32, 'UGDS_WHITE': 1, 'UGDS_BLACK': 0, 
+  # 'UGDS_HISP': 0, 'UGDS_ASIAN': 0, 'UGDS_AIAN': 0, 'UGDS_NHPI': 0, 'UGDS_2MOR': 0, 'UGDS_NRA': 0, 
+  # 'UGDS_UNKN': 0, 'UG25ABV': 0, 'PPTUG_EF': 0, 'INC_PCT_LO': 0 , 'INC_PCT_M1': 0, 'INC_PCT_M2': 1, 
+  # 'INC_PCT_H1': 0, 'INC_PCT_H2': 0, 'PAR_ED_PCT_1STGEN': 0, 'C150_4': 1, 'PCIP14': 1}
 
-  user_filters = {'ADM_RATE': [0.1,1], 'UGDS': [5000,50000], 'TUITIONFEE_IN': [0,40000], 
-                    'TUITIONFEE_OUT': None, 'STABBR': ['NC'], 'MAIN': 1, 'CONTROL': None, 
-                    'RELAFFIL': None, 'DISTANCEONLY': 0, 'HBCU': None, 'PBI': 0, 'ANNHI': 0,
-                    'HSI': 0, 'NANTI': 0, 'MENONLY': None, 'WOMENONLY': None,
-                    'CIP14BACHL': 1, 'GRAD_DEBT_MDN10YR': [0,300]}
+  # user_filters = {'ADM_RATE': [0.1,1], 'UGDS': [5000,50000], 'TUITIONFEE_IN': [0,40000], 
+  #                   'TUITIONFEE_OUT': None, 'STABBR': ['NC'], 'MAIN': 1, 'CONTROL': None, 
+  #                   'RELAFFIL': None, 'DISTANCEONLY': 0, 'HBCU': None, 'PBI': 0, 'ANNHI': 0,
+  #                   'HSI': 0, 'NANTI': 0, 'MENONLY': None, 'WOMENONLY': None,
+  #                   'CIP14BACHL': 1, 'GRAD_DEBT_MDN10YR': [0,300]}
+
+  importance = {'HIGHDEG': 5, 'SAT_AVG': 1, 'ACTCMMID': 1, 'UGDS_WHITE': 4, 'UGDS_BLACK': 4, 
+                'UGDS_HISP': 4, 'UGDS_ASIAN': 4, 'UGDS_AIAN': 4, 'UGDS_NHPI': 4, 'UGDS_2MOR': 4, 
+                'UGDS_NRA': 4, 'UGDS_UNKN': 4, 'UG25ABV': 3, 'PPTUG_EF': 3, 'INC_PCT_LO': 2 , 
+                'INC_PCT_M1': 2, 'INC_PCT_M2': 2, 'INC_PCT_H1': 2, 'INC_PCT_H2': 2, 
+                'PAR_ED_PCT_1STGEN': 3, 'C150_4': 1, 'PCIP14': 1, "RPY_7YR_RT": 1, 
+                "MD_EARN_WNE_P6":1, "MD_EARN_WNE_P10":1, 'ADM_RATE': 1, 'COSTT4_A':1 }
 
   df_knn = df.copy()
 
@@ -76,8 +84,15 @@ def apply_knn(user_input={}, user_filters={}):
   #Standardizing the data
   sc, df_knn_sc = standardize_data(df_knn) 
 
+  #Assigning weights to features for a weighted KNN
+  for col in list(df_knn_sc.columns):
+    df_knn_sc[col] = df_knn_sc[col].apply(lambda x: x*importance[col])
+
   #Applying PCA to reduce dimensionality
-  pca, df_pca = apply_pca(df_knn_sc)
+  comps = 10
+  if df_knn_sc.shape[1] < 10:
+    comps = df_knn_sc.shape[1]
+  pca, df_pca = apply_pca(df_knn_sc, comps)
 
   #Putting the User input into a data frame
   df_input = pd.DataFrame(data=None, columns=df_knn_sc.columns)
