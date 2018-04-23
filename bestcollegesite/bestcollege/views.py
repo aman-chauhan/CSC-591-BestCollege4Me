@@ -8,17 +8,18 @@ from django.template import Context, loader
 from django.views.decorators.csrf import csrf_exempt
 import json
 
-def get_states_from_regions( regions ):
-    region_map = { 'south' : ['Arkansas', 'North Carolina', 'South Carolina', 'Georgia', 'Florida', 'Alabama', 'Mississippi', 'Kentucky', 'Tennessee', 'Louisiana', 'Virginia', 'West Virginia'],
-  'newEngland' : ['New Hampshire', 'Connecticut', 'Massachusets', 'Vermont', 'Rhode Island', 'Maine'],
-  'midAtlantic' : ['Delaware', 'Maryland', 'New Jersey', 'New York', 'Pennsylvania'],
-  'midwest' : ['Illinois', 'Indiana', 'Iowa', 'Kansas', 'Michigan', 'Minnesota', 'Missouri', 'Nebraska', 'North Dakota', 'Ohio', 'South Dakota', 'Wisconsin'],
-  'southwest' : ['Arizona', 'New Mexico', 'Oklahoma', 'Texas'],
-  'west' : ['Alaska', 'Colorado', 'California', 'Hawaii', 'Idaho', 'Montana', 'Nevada', 'Oregon', 'Utah', 'Washington', 'Wyoming'] }
+def get_states_from_regions( regions, home_state ):
+    region_map = { 'south' : ['AR', 'NC', 'SC', 'GA', 'FL', 'AL', 'MS', 'KY', 'TN', 'LA', 'VA', 'WV'],
+  'newEngland' : ['NH', 'CT', 'MA', 'VT', 'RI', 'ME'],
+  'midAtlantic' : ['DE', 'MD', 'NJ', 'NY', 'PA'],
+  'midwest' : ['IL', 'IN', 'IA', 'KS', 'MI', 'MN', 'MO', 'NE', 'ND', 'OH', 'SD', 'WI'],
+  'southwest' : ['AZ', 'NM', 'OK', 'TX'],
+  'west' : ['AK', 'CO', 'CA', 'HI', 'ID', 'MT', 'NV', 'OR', 'UT', 'WA', 'WY'] }
     states = []
     for region in regions:
         for state in region_map[region]:
-            states.append( state )
+            if home_state != state:
+                states.append( state )
 
     return states
 
@@ -62,8 +63,10 @@ def submit_survey(request):
     if request.method == 'POST':
         # survey as json
         survey_response = json.loads(request.body.decode('utf-8'))
+        for key in survey_response:
+            if survey_response[key] == -1:
+                survey_response[key] = None
 
-        # using key to find civil war response
         print ( survey_response )
 
         ##########################################
@@ -122,7 +125,7 @@ def submit_survey(request):
 
         states = []
         if 'region' in survey_response:
-            states = get_states_from_regions( survey_response['region'] )
+            states = get_states_from_regions( survey_response['region'], survey_response['STABBR'] )
         else:
             states.append( survey_response['STABBR'] )
 

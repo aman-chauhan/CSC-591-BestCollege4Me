@@ -146,15 +146,15 @@
           "title": "Are you looking for a gender exclusive school?",
           "choices": [
             {
-              "value": true,
+              "value": 1,
               "text": "Yes"
             },
             {
-              "value": false,
+              "value": 0,
               "text": "No"
             },
             {
-              "value": false,
+              "value": -1,
               "text": "No Preference"
             }
           ]
@@ -208,7 +208,7 @@
               "text": "Branch"
             },
             {
-              "value": null,
+              "value": -1,
               "text": "No Preference"
             }
           ]
@@ -227,7 +227,7 @@
               "text": "Private"
             },
             {
-              "value": null,
+              "value": -1,
               "text": "No Preference"
             }
           ]
@@ -246,7 +246,7 @@
               "text": "No"
             },
             {
-              "value": null,
+              "value": -1,
               "text": "No Preference"
             }
           ]
@@ -274,7 +274,7 @@
               "text": "Yes"
             },
             {
-              "value": null,
+              "value": -1,
               "text": "No"
             }
           ]
@@ -377,7 +377,7 @@
               "text": "Yes"
             },
             {
-              "value": null,
+              "value": -1,
               "text": "No"
             }
           ]
@@ -407,7 +407,7 @@
               "text": "Yes"
             },
             {
-              "value": null,
+              "value": -1,
               "text": "No"
             }
           ]
@@ -471,7 +471,7 @@
               "text": "No"
             },
             {
-              "value": null,
+              "value": -1,
               "text": "Not sure"
             }
           ]
