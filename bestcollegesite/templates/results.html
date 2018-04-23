@@ -124,13 +124,8 @@
                         </div>
                         <br>
                         <div id="sort_btns" class="btn-toolbar" role="toolbar">
-                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                <label class="btn btn-dark active" ng-click="sort_by_night()">
-                                    <input type="radio" name="options" autocomplete="off" checked>Sort by Nightlife
-                                </label>
-                                <label class="btn btn-dark active" ng-click="sort_by_crime()">
-                                    <input type="radio" name="options" autocomplete="off">Sort by Crime
-                                </label>
+                            <div class="btn-group">
+                                <button class="btn btn-dark active" ng-click="show_sort_modal()">Sort Schools</button>
                             </div>
                         </div>
                     </div>
@@ -147,6 +142,27 @@
         			<h5>Information about how our application works</h5>
         		</div>
         	</div>
+
+            <div class="modal" id="sort_modal">
+                <div class="modal-content" id="sort_modal_body">
+                    <span class="close">&times;</span>
+                    <h5>Sorting Options</h5>
+                    <div class="input-group">
+                        <input type="text" class="form-control" aria-label="Text input with dropdown button">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Importance</button>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="#">1</a>
+                                    <a class="dropdown-item" href="#">2</a>
+                                    <a class="dropdown-item" href="#">3</a>
+                                    <a class="dropdown-item" href="#">4</a>
+                                    <a class="dropdown-item" href="#">5</a>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+
                 </div>
             </div>
         </div>
@@ -228,6 +244,7 @@
                 var google_places_api_key = '&key=AIzaSyAnsbjT7Dm9Qz9Daf8EgmaL1jaovBfV_Hc';
 
                 var bar_rank = [];
+                var bar_data = {};
                 var get_bars = function( idx ) { 
                     var google_places_url = google_places_base_url;
                     //console.log( $scope.schools[idx].name );
@@ -251,6 +268,7 @@
                         bar_rank[idx].avg_rating = sum / valid_count;
 
                         bar_rank[idx].value = ( ( bar_rank[idx].count / 20.0 ) + ( bar_rank[idx].avg_rating / 5.0 ) ) / 2.0;
+                        bar_data[$scope.schools[idx].id] = ( ( bar_rank[idx].count / 20.0 ) + ( bar_rank[idx].avg_rating / 5.0 ) ) / 2.0;
 
                         if ( idx < $scope.schools.length - 1 )
                             get_bars( ++idx );
@@ -264,6 +282,29 @@
                     } );
                 }
 
+                $scope.sort_schools = function() {
+                    $.post( '/bestcollege/sort_results/', JSON.stringify( bar_data ), function( res ) {
+                        var sorted_list = JSON.parse( res );
+                        for ( var i = 0; i < sorted_list.ids.length; i++ ) {
+                            for ( var j = 0; j < $scope.schools.length; j++ ) {
+                                if ( sorted_list.ids[i] === $scope.schools[j].id ) {
+                                    console.log( 'match' );
+                                    var temp = $scope.schools[i];
+                                    $scope.schools[i] = $scope.schools[j];
+                                    $scope.schools[i].rank = i + 1;
+                                    $scope.schools[j] = temp;
+                                    $scope.schools[j].rank = j + 1;
+                                }
+                            }
+                        }
+                        $scope.$apply();
+                    } );
+                }
+
+                $scope.show_sort_modal = function() {
+                    $( '#sort_modal' ).show( 250 );
+                }
+                
                 function mergesort( bar_list ) {
                     if ( bar_list.length === 1 )
                         return bar_list;
@@ -281,24 +322,6 @@
                     var res = [];
 
                     while ( i < left.length && j < right.length ) {
-                        /*
-                        if ( left[i].count > right[j].count ) {
-                            res.push( left[i] );
-                            i++;
-                        } else if ( right[j].count > left[i].count ) {
-                            res.push( right[j] );
-                            j++;
-                        } else {
-                            if ( left[i].avg_rating > right[j].avg_rating ) {
-                                res.push( left[i] );
-                                i++;
-                            }
-                            else {
-                                res.push( right[j] );
-                                j++;
-                            }
-                        }
-                        */
                         if ( left[i].value > right[j].value ) {
                             res.push( left[i] );
                             i++;
@@ -320,11 +343,7 @@
 
                     return res;
                 }
-
-   				$scope.show_info_menu = function() {
-   					$( '#info_modal' ).show( 200 );
-   				}
-
+                
                 $scope.sort_by_night = function() {
                     for ( var i = 0; i < bar_rank.length; i++ ) {
                         for ( var j = 0; j < $scope.schools.length; j++ ) {
@@ -339,6 +358,10 @@
                     }
                 }
 
+                $scope.show_info_menu = function() {
+                    $( '#info_modal' ).show( 200 );
+                }
+
 			} ] );
 
 			$( '.close' ).click( function() {
@@ -349,6 +372,12 @@
 				$( '#info_modal' ).hide();
 				$( '#info_modal_body' ).width( $( window ).width() * 0.35 );
 				$( '#info_modal_body' ).height( $( window ).height() * 0.45 );
+
+                $( '#sort_modal' ).hide();
+                $( '#sort_modal_body' ).width( $( window ).width() * 0.75 );
+                $( '#sort_modal_body' ).height( $( window ).height() * 0.45 );
+
+
                 $( '#sort_btns' ).hide();
 			}
 

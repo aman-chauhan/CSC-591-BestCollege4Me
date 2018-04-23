@@ -4,7 +4,7 @@ var surveyJSON;
 // window.survey = new Survey.Model();
 function on_page_load() {
   $.get(
-    'https://raw.githubusercontent.com/aman-chauhan/CSC-591-BestCollege4Me/frontend-work/bestcollegesite/static/survey.json',
+    'https://raw.githubusercontent.com/aman-chauhan/CSC-591-BestCollege4Me/master/bestcollegesite/static/survey.json',
     function(raw_data) {
       surveyJSON = raw_data;
       // console.log(raw_data);
