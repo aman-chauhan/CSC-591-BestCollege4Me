@@ -8,6 +8,72 @@ from django.template import Context, loader
 from django.views.decorators.csrf import csrf_exempt
 import json
 
+religion_map = {
+    "American Evangelical Lutheran Church" : 22,
+    "African Methodist Episcopal Zion Church" : 24,
+    "Assemblies of God Church" : 24,
+    "Brethren Church" : 28,
+    "Roman Catholic" : 30,
+    "Wisconsin Evangelical Lutheran Synod" : 33,
+    "Christ and Missionary Alliance Church" : 34,
+    "Christian Reformed Church" : 35,
+    "Evangelical Congregational Church" : 36,
+    "Evangelical Covenant Church of America" : 37,
+    "Evangelical Free Church of America" : 38,
+    "Evangelical Lutheran Church" : 39,
+    "International United Pentecostal Church" : 40,
+    "Free Will Baptist Church" : 41,
+    "Interdenominational" : 42,
+    "Mennonite Brethren Church" : 43,
+    "Moravian Church" : 44,
+    "North American Baptist" : 45,
+    "Pentecostal Holiness Church" : 47,
+    "Christian Churches and Churches of Christ" : 48,
+    "Reformed Church in America" : 49,
+    "Episcopal Church, Reformed" : 50,
+    "African Methodist Episcopal" : 51,
+    "American Baptist" : 52,
+    "American Lutheran" : 53,
+    "Baptist" : 54,
+    "Christian Methodist Episcopal" : 55,
+    "Church of God" : 57,
+    "Church of Brethren" : 58,
+    "Church of the Nazarene" : 59,
+    "Cumberland Presbyterian" : 60,
+    "Christian Church (Disciples of Christ)" : 61,
+    "Free Methodist" : 64,
+    "Friends" : 65,
+    "Presbyterian Church (USA)" : 66,
+    "Lutheran Church in America" : 67,
+    "Lutheran Church - Missouri Synod" : 68,
+    "Mennonite Church" : 69,
+    "United Methodist" : 71,
+    "Protestant Episcopal" : 73,
+    "Churches of Christ" : 74,
+    "Southern Baptist" : 75,
+    "United Church of Christ" : 76,
+    "Protestant, not specified" : 77,
+    "Multiple Protestant Denomination" : 78,
+    "Other Protestant" : 79,
+    "Jewish" : 80,
+    "Reformed Presbyterian Church" : 81,
+    "United Brethren Church" : 84,
+    "Missionary Church Inc" : 87,
+    "Undenominational" : 88,
+    "Wesleyan" : 89,
+    "Greek Orthodox" : 91,
+    "Russian Orthodox" : 92,
+    "Unitarian Universalist" : 93,
+    "Latter Day Saints (Mormon Church)" : 94,
+    "Seventh Day Adventists" : 95,
+    "The Presbyterian Church in America" : 97,
+    "Other (none of the above)" : 99,
+    "Original Free Will Baptist" : 100,
+    "Ecumenical Christian" : 101,
+    "Evangelical Christian" : 102,
+    "Presbyterian" : 103
+}
+
 def get_states_from_regions( regions, home_state ):
     region_map = { 'south' : ['AR', 'NC', 'SC', 'GA', 'FL', 'AL', 'MS', 'KY', 'TN', 'LA', 'VA', 'WV'],
   'newEngland' : ['NH', 'CT', 'MA', 'VT', 'RI', 'ME'],
@@ -64,9 +130,10 @@ def submit_survey(request):
         # survey as json
         survey_response = json.loads(request.body.decode('utf-8'))
         for key in survey_response:
-            if survey_response[key] == -1:
+            if survey_response[key] == '-1':
                 survey_response[key] = None
 
+        print ( 'None values adjusted' )
         print ( survey_response )
 
         ##########################################
@@ -117,7 +184,7 @@ def submit_survey(request):
 
         men_only = None
         women_only = None
-        if survey_response['genderExclusive']:
+        if ( int ( survey_response['genderExclusive'] ) ) == 1:
             if survey_response['gender'] == 'male':
                 men_only = 1
             elif survey_response['gender'] == 'female':
@@ -133,10 +200,14 @@ def submit_survey(request):
         if 'historicType' in survey_response:
             historic_type = survey_response['historicType']
 
+        rel_affil = None
+        if 'RELAFFIL' in survey_response:
+            rel_affil = religion_map[survey_response['RELAFFIL']]
+
 
         user_filters = { 'ADM_RATE' : [survey_response['acceptanceRate'] / 100.0, 1], 'UGDS' : get_student_body_size( survey_response['studentBodySize'] ),
         'TUITIONFEE_IN' : tuition_in, 'TUITIONFEE_OUT' : tuition_out, 'STABBR' : states, 'MAIN' : survey_response['MAIN'], 'CONTROL' : survey_response['CONTROL'],
-        'RELAFFIL' : None, 'DISTANCEONLY' : survey_response['DISTANCEONLY'], 'HBCU': get_historic( historic_type, 'HBCU' ), 'PBI': get_historic( historic_type, 'PBI' ),
+        'RELAFFIL' : rel_affil, 'DISTANCEONLY' : survey_response['DISTANCEONLY'], 'HBCU': get_historic( historic_type, 'HBCU' ), 'PBI': get_historic( historic_type, 'PBI' ),
         'ANNHI': get_historic( historic_type, 'ANNHI' ), 'HSI': get_historic( historic_type, 'HSI' ), 'NANTI': get_historic( historic_type, 'NANTI' ),
         'MENONLY': men_only, 'WOMENONLY': women_only, 'CIP14BACHL': 1, 'GRAD_DEBT_MDN10YR': [0,survey_response['monthlyLoans']] }
 
@@ -172,8 +243,8 @@ def sort_results( request ):
     # keys are unitids of schools
     if request.method == 'POST':
         # survey as json
-        nightlife_scores = json.loads( request.body.decode( 'utf-8' ) )
-        print ( nightlife_scores )
+        user_sort_data = json.loads( request.body.decode( 'utf-8' ) )
+        print ( user_sort_data )
 
     # sorting done here
 

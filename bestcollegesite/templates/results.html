@@ -13,6 +13,9 @@
 
 		<!-- jQuery library -->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+        <!-- popper js -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
 		
 		<!-- Latest compiled Bootstrap CSS -->
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.css">
@@ -22,6 +25,10 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
 
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-route.min.js"></script>
+
+        <!-- bootstrap slider -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.0.0/bootstrap-slider.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.0.0/css/bootstrap-slider.min.css">
 
         <!-- latest d3 visualization library -->
         <script src="https://d3js.org/d3.v4.min.js"></script>
@@ -44,9 +51,6 @@
                     </li>
                     <li class="nav-item active">
                         <a class="nav-link" href="{% url 'survey' %}">Get Started <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'results' %}">Results Page for dev work<span class="sr-only">(current)</span></a>
                     </li>
                 </ul>
 
@@ -143,25 +147,107 @@
         		</div>
         	</div>
 
+            {% verbatim %}
             <div class="modal" id="sort_modal">
                 <div class="modal-content" id="sort_modal_body">
                     <span class="close">&times;</span>
                     <h5>Sorting Options</h5>
-                    <div class="input-group">
-                        <input type="text" class="form-control" aria-label="Text input with dropdown button">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Importance</button>
-                                <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="#">1</a>
-                                    <a class="dropdown-item" href="#">2</a>
-                                    <a class="dropdown-item" href="#">3</a>
-                                    <a class="dropdown-item" href="#">4</a>
-                                    <a class="dropdown-item" href="#">5</a>
+                    <div id="sort-collapse-menu">
+                        <div class="card">
+                            <div id="weather-heading" class="card-header">
+                                <div class="row">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link" data-toggle="collapse" data-target="#weather-collapse" aria-expanded="false" aria-controls="weather-collapse">Weather Preferences
+                                            <span class="fa fa-caret-down"></span>
+                                        </button>
+                                    </h5>
+                                    <div class="btn-toolbar">
+                                        <div class="dropdown">
+                                            <button class="btn btn-dark dropdown-toggle" type="button" id="weather_importance_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Select Importance</button>
+
+                                            <div class="dropdown-menu" aria-labelledby="weather_importance_dropdown">
+                                                <a class="dropdown-item" href="" ng-repeat="num in importance_nums" ng-click="select_weather_importance( num )">{{ num }}</a>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+
+                            <div id="weather-collapse" class="collapse" aria-labelledby="weather-heading" data-parent="#sort-collapse-menu">
+                                <div class="card-body">
+                                    <!-- sliders and stuff -->
+                                    <div class="row center">
+                                        <p>
+                                            <span id="spring_temp_lbl" class="slider_lbl" for="spring_temp">Spring: <span ng-bind-html="slider_temp_text.spring"></span>&deg;F</span>
+                                            <input id="spring_temp" class="temp_slider" data-slider-id='spring_temp' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="5" data-slider-value="50"/>
+                                        <p>
+                                    </div>
+                                    <div class="row center">
+                                        <p>
+                                            <span id="spring_temp_lbl" class="slider_lbl" for="summer_temp">Summer: <span ng-bind-html="slider_temp_text.summer"></span>&deg;F</span>
+                                            <input id="summer_temp" class="temp_slider" data-slider-id='summer_temp' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="5" data-slider-value="65"/>
+                                        </p>
+                                    </div>
+                                    <div class="row center">
+                                        <p>
+                                            <span id="fall_temp_lbl" class="slider_lbl" for="fall_temp">Fall: <span ng-bind-html="slider_temp_text.fall"></span>&deg;F</span>
+                                            <input id="fall_temp" class="temp_slider" data-slider-id='fall_temp' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="5" data-slider-value="50"/>
+                                        </p>
+                                    </div>
+                                    <div class="row center">
+                                        <p>
+                                            <span id="winter_temp_lbl" class="slider_lbl" for="summer_temp">Winter: <span ng-bind-html="slider_temp_text.winter"></span>&deg;F</span>
+                                            <input id="winter_temp" class="temp_slider" data-slider-id='winter_temp' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="5" data-slider-value="35"/>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div id="crime-heading" class="card-header">
+                                <div class="row">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link" aria-expanded="false">Crime Rate</button>
+                                    </h5>
+                                    <div class="btn-toolbar">
+                                        <div class="dropdown">
+                                            <button class="btn btn-dark dropdown-toggle" type="button" id="crime_importance_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Select Importance</button>
+
+                                            <div class="dropdown-menu" aria-labelledby="crime_importance_dropdown">
+                                                <a class="dropdown-item" href="" ng-repeat="num in importance_nums" ng-click="select_crime_importance( num )">{{ num }}</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div id="crime-heading" class="card-header">
+                                <div class="row">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link" aria-expanded="false">Night Life</button>
+                                    </h5>
+                                    <div class="btn-toolbar">
+                                        <div class="dropdown">
+                                            <button class="btn btn-dark dropdown-toggle" type="button" id="nightlife_importance_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Select Importance</button>
+
+                                            <div class="dropdown-menu" aria-labelledby="nightlife_importance_dropdown">
+                                                <a class="dropdown-item" href="" ng-repeat="num in importance_nums" ng-click="select_nightlife_importance( num )">{{ num }}</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group mt-3">
+                        <button class="btn btn-dark" ng-click="sort_schools()">Submit</button>
                     </div>
                 </div>
             </div>
+            {% endverbatim %}
 
                 </div>
             </div>
@@ -171,8 +257,82 @@
             var ids = [];
             var id_str = "";
         	var app = angular.module( 'angular_app', [] );
-			app.controller( 'angular_ctrl', [ '$scope', '$http', function ( $scope, $http ) {
+			app.controller( 'angular_ctrl', [ '$scope', '$sce', '$http', function ( $scope, $sce, $http ) {
                 $scope.schools = [];
+                $scope.importance_nums = [1, 2, 3, 4, 5];
+                $scope.sorting_dict = {
+                    'weather' : {
+                        'temps' : {
+                            'spring' : 50,
+                            'summer' : 65,
+                            'fall' : 50,
+                            'winter' : 35
+                        },
+                        'importance' : 1
+                    },
+                    'crime' : {
+                        'importance' : 1
+                    },
+                    'nightlife' : {
+                        'schools' : {},
+                        'importance' : 1
+                    }
+                };
+
+                var spring_slider = $( '#spring_temp' ).slider();
+                var summer_slider = $( '#summer_temp' ).slider();
+                var fall_slider = $( '#fall_temp' ).slider();
+                var winter_slider = $( '#winter_temp' ).slider();
+                $scope.slider_temp_text = {
+                    'spring' : $sce.trustAsHtml( spring_slider.slider( 'getValue' ).toString() ),
+                    'summer' : $sce.trustAsHtml( summer_slider.slider( 'getValue' ).toString() ),
+                    'fall' : $sce.trustAsHtml( fall_slider.slider( 'getValue' ).toString() ),
+                    'winter' : $sce.trustAsHtml( winter_slider.slider( 'getValue' ).toString() )
+                };
+
+                spring_slider.slider( {
+                    formatter: function( val ) {
+                        return 'Current value: ' + val;
+                    }
+                } );
+
+                summer_slider.slider( {
+                    formatter: function( val ) {
+                        return 'Current value: ' + val;
+                    }
+                } );
+
+                fall_slider.slider( {
+                    formatter: function( val ) {
+                        return 'Current value: ' + val;
+                    }
+                } );
+
+                winter_slider.slider( {
+                    formatter: function( val ) {
+                        return 'Current value: ' + val;
+                    }
+                } );
+
+                spring_slider.on( "change", function( slideEvt ) {
+                    $scope.slider_temp_text.spring = $sce.trustAsHtml( slideEvt.value.newValue.toString() );
+                    $scope.$apply();
+                } );
+
+                summer_slider.on( "change", function( slideEvt ) {
+                    $scope.slider_temp_text.summer = $sce.trustAsHtml( slideEvt.value.newValue.toString() );
+                    $scope.$apply();
+                } );
+
+                fall_slider.on( "change", function( slideEvt ) {
+                    $scope.slider_temp_text.fall = $sce.trustAsHtml( slideEvt.value.newValue.toString() );
+                    $scope.$apply();
+                } );
+
+                winter_slider.on( "change", function( slideEvt ) {
+                    $scope.slider_temp_text.winter = $sce.trustAsHtml( slideEvt.value.newValue.toString() );
+                    $scope.$apply();
+                } );
 
                 var full_url = window.location.href;
                 var id_key = "?ids=";
@@ -268,7 +428,10 @@
                         bar_rank[idx].avg_rating = sum / valid_count;
 
                         bar_rank[idx].value = ( ( bar_rank[idx].count / 20.0 ) + ( bar_rank[idx].avg_rating / 5.0 ) ) / 2.0;
-                        bar_data[$scope.schools[idx].id] = ( ( bar_rank[idx].count / 20.0 ) + ( bar_rank[idx].avg_rating / 5.0 ) ) / 2.0;
+                        bar_data[$scope.schools[idx].id] = {
+                            'nightlife_score' : ( ( bar_rank[idx].count / 20.0 ) + ( bar_rank[idx].avg_rating / 5.0 ) ) / 2.0,
+                            'zip' : $scope.schools[idx].zip
+                        };
 
                         if ( idx < $scope.schools.length - 1 )
                             get_bars( ++idx );
@@ -283,12 +446,20 @@
                 }
 
                 $scope.sort_schools = function() {
-                    $.post( '/bestcollege/sort_results/', JSON.stringify( bar_data ), function( res ) {
+                    $( '#sort_modal' ).hide( 250 );
+                    $scope.sorting_dict.weather.temps.spring = spring_slider.slider( 'getValue' );
+                    $scope.sorting_dict.weather.temps.summer = summer_slider.slider( 'getValue' );
+                    $scope.sorting_dict.weather.temps.fall = fall_slider.slider( 'getValue' );
+                    $scope.sorting_dict.weather.temps.winter = winter_slider.slider( 'getValue' );
+                    $scope.sorting_dict.nightlife.schools = bar_data;
+
+                    console.log( $scope.sorting_dict );
+
+                    $.post( '/bestcollege/sort_results/', JSON.stringify( $scope.sorting_dict ), function( res ) {
                         var sorted_list = JSON.parse( res );
                         for ( var i = 0; i < sorted_list.ids.length; i++ ) {
                             for ( var j = 0; j < $scope.schools.length; j++ ) {
                                 if ( sorted_list.ids[i] === $scope.schools[j].id ) {
-                                    console.log( 'match' );
                                     var temp = $scope.schools[i];
                                     $scope.schools[i] = $scope.schools[j];
                                     $scope.schools[i].rank = i + 1;
@@ -303,6 +474,18 @@
 
                 $scope.show_sort_modal = function() {
                     $( '#sort_modal' ).show( 250 );
+                }
+
+                $scope.select_weather_importance = function( n ) {
+                    $scope.sorting_dict.weather.importance = n;
+                }
+
+                $scope.select_crime_importance = function( n ) {
+                    $scope.sorting_dict.crime.importance = n;
+                }
+
+                $scope.select_nightlife_importance = function( n ) {
+                    $scope.sorting_dict.nightlife.importance = n;
                 }
                 
                 function mergesort( bar_list ) {
@@ -374,8 +557,8 @@
 				$( '#info_modal_body' ).height( $( window ).height() * 0.45 );
 
                 $( '#sort_modal' ).hide();
-                $( '#sort_modal_body' ).width( $( window ).width() * 0.75 );
-                $( '#sort_modal_body' ).height( $( window ).height() * 0.45 );
+                $( '#sort_modal_body' ).width( $( window ).width() * 0.65 );
+                $( '#sort_modal_body' ).height( $( window ).height() * 0.55 );
 
 
                 $( '#sort_btns' ).hide();

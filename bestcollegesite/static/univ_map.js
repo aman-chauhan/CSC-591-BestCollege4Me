@@ -1,5 +1,5 @@
 function map_builder( ret_data ) {
-	var width = $( window ).width() * 0.50,
+	var width = $( window ).width() * 0.45,
 	height = $( window ).height() * 0.75;
 
 	var svg = d3.select( "#graph_col" ).append( "svg" )

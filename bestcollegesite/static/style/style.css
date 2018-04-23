@@ -81,6 +81,14 @@ div.tooltip {
   border-radius: 300px;
 }
 
+.temp_slider .slider-selection {
+  background: #BABABA;
+}
+
+.slider_lbl {
+  padding-right: 3% !important;
+}
+
 .btn-back {
   background-color: #CC0000 !important;
   border-color: #fff !important;
@@ -143,7 +151,7 @@ hr {
 
 .modal-content {
     opacity: 1.0;
-    margin: 15% auto;
+    margin: 10% auto;
     padding: 20px;
     border: 1px solid #888;
     overflow: auto;
