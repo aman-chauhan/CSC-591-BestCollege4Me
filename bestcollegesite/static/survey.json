@@ -479,7 +479,32 @@
       ]
     },
     {
-      "name": "page4",
+      "name" : "page4",
+      "elements" : [
+        {
+          "type": "nouislider",
+          "name": "winter",
+          "title": "What is your ideal temperature for winter? (in Fahrenheit)"
+        },
+        {
+          "type": "nouislider",
+          "name": "spring",
+          "title": "What is your ideal temperature for spring? (in Fahrenheit)"
+        },
+        {
+          "type": "nouislider",
+          "name": "summer",
+          "title": "What is your ideal temperature for summer? (in Fahrenheit)"
+        },
+        {
+          "type": "nouislider",
+          "name": "fall",
+          "title": "What is your ideal temperature for fall? (in Fahrenheit)"
+        }
+      ]
+    }
+    {
+      "name": "page5",
       "elements": [
         {
           "type": "radiogroup",
