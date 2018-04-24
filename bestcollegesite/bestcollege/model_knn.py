@@ -6,7 +6,7 @@ import pickle
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from sklearn.neighbors import NearestNeighbors
-
+from .diversity_mix import get_diversity_mix
 
 #Method to standardize data
 def standardize_data(df_sc):
@@ -25,7 +25,7 @@ def apply_pca(df_pca, n):
 def apply_knn(user_input={}, user_filters={}):
   SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
   df = pd.read_csv(SITE_ROOT+"/data/cleaned_data.csv")
- 
+
   importance = {'HIGHDEG': 5, 'SAT_AVG': 1, 'ACTCMMID': 1, 'UGDS_WHITE': 4, 'UGDS_BLACK': 4, 
                 'UGDS_HISP': 4, 'UGDS_ASIAN': 4, 'UGDS_AIAN': 4, 'UGDS_NHPI': 4, 'UGDS_2MOR': 4, 
                 'UGDS_NRA': 4, 'UGDS_UNKN': 4, 'UG25ABV': 3, 'PPTUG_EF': 3, 'INC_PCT_LO': 2 , 
