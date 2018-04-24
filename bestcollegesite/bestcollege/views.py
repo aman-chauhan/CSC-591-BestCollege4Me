@@ -115,6 +115,12 @@ def get_historic( survey_historic, historic_key ):
     else:
         return 0
 
+def get_integer_val(response, key):
+    if response[key]:
+        return int(response[key])
+    else:
+        return None
+
 def index(request):
     template = loader.get_template('index.html')
     return HttpResponse(template.render())
@@ -150,23 +156,28 @@ def submit_survey(request):
 
         sat = None
         if 'SAT_AVG' in survey_response['testScores']:
-            sat = survey_response['testScores']['SAT_AVG']
+            sat = int(survey_response['testScores']['SAT_AVG'])
 
         act = None
-        if 'ACTCMID' in survey_response['testScores']:
-            act = survey_response['testScores']['ACTCMID'] 
+        if 'ACTCMMID' in survey_response['testScores']:
+            act = int(survey_response['testScores']['ACTCMMID']) 
 
         dem = None
         if 'demographicType' in survey_response:
             dem = survey_response['demographicType']
 
         #Applying KNN to find the best colleges for the user
-        user_input = { 'HIGHDEG' : 4, 'SAT_AVG' : sat, 'ACTCMID' : act, 'UGDS_WHITE' : get_demographic( dem, 'UGDS_WHITE' ), 'UGDS_BLACK' : get_demographic( dem, 'UGDS_BLACK' ),
-            'UGDS_HISP' : get_demographic( dem, 'UGDS_HISP' ), 'UGDS_ASIAN' : get_demographic( dem, 'UGDS_ASIAN' ), 'UGDS_AIAN' : get_demographic( dem, 'UGDS_AIAN' ),
-            'UGDS_NHPI' : get_demographic( dem, 'UGDS_NHPI' ), 'UGDS_2MOR' : 0, 'UGDS_NRA' : 0, 'UGDS_UNKN' : 0,
-            'UG25ABV' : survey_response['UG25ABV'], 'PPTUG_EF' : survey_response['PPTUG_EF'], 'INC_PCT_LO' : get_income_range( survey_response['householdIncome'], 'INC_PCT_LO' ),
-            'INC_PCT_M1' : get_income_range( survey_response['householdIncome'], 'INC_PCT_M1' ), 'INC_PCT_M2' : get_income_range( survey_response['householdIncome'], 'INC_PCT_M2' ),
-            'INC_PCT_H1' : get_income_range( survey_response['householdIncome'], 'INC_PCT_H1' ), 'INC_PCT_H2' : get_income_range( survey_response['householdIncome'], 'INC_PCT_H2' ),
+        user_input = { 'HIGHDEG' : 4, 'SAT_AVG' : sat, 'ACTCMMID' : act, 
+            'UGDS_WHITE' : get_demographic( dem, 'UGDS_WHITE' ), 'UGDS_BLACK' : get_demographic( dem, 'UGDS_BLACK' ),
+            'UGDS_HISP' : get_demographic( dem, 'UGDS_HISP' ), 'UGDS_ASIAN' : get_demographic( dem, 'UGDS_ASIAN' ), 
+            'UGDS_AIAN' : get_demographic( dem, 'UGDS_AIAN' ), 'UGDS_NHPI' : get_demographic( dem, 'UGDS_NHPI' ), 
+            'UGDS_2MOR' : 0, 'UGDS_NRA' : 0, 'UGDS_UNKN' : 0, 'UG25ABV' : get_integer_val(survey_response, 'UG25ABV'), 
+            'PPTUG_EF' : get_integer_val(survey_response, 'PPTUG_EF'), 
+            'INC_PCT_LO' : get_income_range( survey_response['householdIncome'], 'INC_PCT_LO' ),
+            'INC_PCT_M1' : get_income_range( survey_response['householdIncome'], 'INC_PCT_M1' ), 
+            'INC_PCT_M2' : get_income_range( survey_response['householdIncome'], 'INC_PCT_M2' ),
+            'INC_PCT_H1' : get_income_range( survey_response['householdIncome'], 'INC_PCT_H1' ), 
+            'INC_PCT_H2' : get_income_range( survey_response['householdIncome'], 'INC_PCT_H2' ),
             'PAR_ED_PCT_1STGEN' : None, 'C150_4' : 1, 'PCIP14' : 1 }
 
         #semesterTuition
@@ -205,20 +216,30 @@ def submit_survey(request):
             rel_affil = religion_map[survey_response['RELAFFIL']]
 
 
-        user_filters = { 'ADM_RATE' : [survey_response['acceptanceRate'] / 100.0, 1], 'UGDS' : get_student_body_size( survey_response['studentBodySize'] ),
-        'TUITIONFEE_IN' : tuition_in, 'TUITIONFEE_OUT' : tuition_out, 'STABBR' : states, 'MAIN' : survey_response['MAIN'], 'CONTROL' : survey_response['CONTROL'],
-        'RELAFFIL' : rel_affil, 'DISTANCEONLY' : survey_response['DISTANCEONLY'], 'HBCU': get_historic( historic_type, 'HBCU' ), 'PBI': get_historic( historic_type, 'PBI' ),
-        'ANNHI': get_historic( historic_type, 'ANNHI' ), 'HSI': get_historic( historic_type, 'HSI' ), 'NANTI': get_historic( historic_type, 'NANTI' ),
-        'MENONLY': men_only, 'WOMENONLY': women_only, 'CIP14BACHL': 1, 'GRAD_DEBT_MDN10YR': [0,survey_response['monthlyLoans']] }
+        user_filters = { 'ADM_RATE' : [survey_response['acceptanceRate'] / 100.0, 1], 
+        'UGDS' : get_student_body_size( survey_response['studentBodySize'] ),
+        'TUITIONFEE_IN' : tuition_in, 'TUITIONFEE_OUT' : tuition_out, 'STABBR' : states, 
+        'MAIN' : get_integer_val(survey_response, 'MAIN'), 'CONTROL' : get_integer_val(survey_response, 'CONTROL'),
+        'RELAFFIL' : rel_affil, 'DISTANCEONLY' : get_integer_val(survey_response, 'DISTANCEONLY'), 
+        'HBCU': get_historic( historic_type, 'HBCU' ), 'PBI': get_historic( historic_type, 'PBI' ),
+        'ANNHI': get_historic( historic_type, 'ANNHI' ), 'HSI': get_historic( historic_type, 'HSI' ), 
+        'NANTI': get_historic( historic_type, 'NANTI' ), 'MENONLY': men_only, 'WOMENONLY': women_only, 
+        'CIP14BACHL': 1, 'GRAD_DEBT_MDN10YR': [0,survey_response['monthlyLoans']] }
 
+
+        print(user_input)
+        print(user_filters)
         unit_ids = apply_knn(user_input, user_filters)
+        print(unit_ids)
+        temp_ids = [int(uid) for uid in unit_ids]
+        unit_ids = temp_ids
 
         # for dev testing
         uni_ids = [199193, 139959, 198419, 228778, 217882, 100858, 243744, 171100, 216597, 228875]
 
         # fill zip using value from survey JSON
         # example below
-        return HttpResponse( json.dumps( { 'ids' : uni_ids, 'zip' : int ( survey_response['zipCode'] ) } ) )
+        return HttpResponse( json.dumps( { 'ids' : unit_ids, 'zip' : int ( survey_response['zipCode'] ) } ) )
 
 
 def results(request):
