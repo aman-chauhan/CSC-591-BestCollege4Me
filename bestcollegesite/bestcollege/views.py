@@ -123,11 +123,16 @@ def get_historic( survey_historic, historic_key ):
     else:
         return 0
 
-def get_integer_val(response, key):
+def get_numeric_val(response, key):
     if response[key]:
-        return int(response[key])
+        if '.' in response[key]:
+            return float(response[key])
+        else:
+            return int(response[key])
     else:
         return None
+
+
 
 def index(request):
     template = loader.get_template('index.html')
@@ -180,15 +185,18 @@ def submit_survey(request):
             'UGDS_WHITE' : get_demographic( dem, 'UGDS_WHITE' ), 'UGDS_BLACK' : get_demographic( dem, 'UGDS_BLACK' ),
             'UGDS_HISP' : get_demographic( dem, 'UGDS_HISP' ), 'UGDS_ASIAN' : get_demographic( dem, 'UGDS_ASIAN' ), 
             'UGDS_AIAN' : get_demographic( dem, 'UGDS_AIAN' ), 'UGDS_NHPI' : get_demographic( dem, 'UGDS_NHPI' ), 
-            'UGDS_2MOR' : 0, 'UGDS_NRA' : 0, 'UGDS_UNKN' : 0, 'UG25ABV' : get_integer_val(survey_response, 'UG25ABV'), 
-            'PPTUG_EF' : get_integer_val(survey_response, 'PPTUG_EF'), 
+            'UG25ABV' : get_numeric_val(survey_response, 'UG25ABV'), 'PPTUG_EF' : get_numeric_val(survey_response, 'PPTUG_EF'), 
             'INC_PCT_LO' : get_income_range( survey_response['householdIncome'], 'INC_PCT_LO' ),
             'INC_PCT_M1' : get_income_range( survey_response['householdIncome'], 'INC_PCT_M1' ), 
             'INC_PCT_M2' : get_income_range( survey_response['householdIncome'], 'INC_PCT_M2' ),
             'INC_PCT_H1' : get_income_range( survey_response['householdIncome'], 'INC_PCT_H1' ), 
             'INC_PCT_H2' : get_income_range( survey_response['householdIncome'], 'INC_PCT_H2' ),
-            'PAR_ED_PCT_1STGEN' : None, 'C150_4' : 1, 'PCIP14' : 1 }
-
+            'PAR_ED_PCT_1STGEN' : None, 'C150_4' : 1, 'PCIP14' : 1, 'ADM_RATE': float(survey_response['acceptanceRate']), 
+            'MD_EARN_WNE_P10': get_numeric_val(survey_response, 'expectedEarnings'), 'RPY_3YR_RT': 1,
+            'MD_EARN_WNE_P6':  get_numeric_val(survey_response, 'expectedEarnings'),'RPY_7YR_RT': 1, 'RPY_5YR_RT': 1,
+            'SPRING_TAVG': get_numeric_val(survey_response, 'spring'),'SUMMER_TAVG': get_numeric_val(survey_response, 'summer'),
+            'FALL_TAVG': get_numeric_val(survey_response, 'fall'), 'WINTER_TAVG': get_numeric_val(survey_response, 'winter')
+            }
         #semesterTuition
         #stateSchool
 
@@ -231,11 +239,11 @@ def submit_survey(request):
         summer_range = [float ( survey_response['summer'] ) - 5, float ( survey_response['summer'] ) + 5]
         fall_range = [float ( survey_response['fall'] ) - 5, float ( survey_response['fall'] ) + 5]
 
-        user_filters = { 'ADM_RATE' : [survey_response['acceptanceRate'] / 100.0, 1], 
+        user_filters = { 'ADM_RATE' : [float(survey_response['acceptanceRate']) / 100.0, 1], 
         'UGDS' : get_student_body_size( survey_response['studentBodySize'] ),
         'TUITIONFEE_IN' : tuition_in, 'TUITIONFEE_OUT' : tuition_out, 'STABBR' : states, 
-        'MAIN' : get_integer_val(survey_response, 'MAIN'), 'CONTROL' : get_integer_val(survey_response, 'CONTROL'),
-        'RELAFFIL' : rel_affil, 'DISTANCEONLY' : get_integer_val(survey_response, 'DISTANCEONLY'), 
+        'MAIN' : get_numeric_val(survey_response, 'MAIN'), 'CONTROL' : get_numeric_val(survey_response, 'CONTROL'),
+        'RELAFFIL' : rel_affil, 'DISTANCEONLY' : get_numeric_val(survey_response, 'DISTANCEONLY'), 
         'HBCU': get_historic( historic_type, 'HBCU' ), 'PBI': get_historic( historic_type, 'PBI' ),
         'ANNHI': get_historic( historic_type, 'ANNHI' ), 'HSI': get_historic( historic_type, 'HSI' ), 
         'NANTI': get_historic( historic_type, 'NANTI' ), 'MENONLY': men_only, 'WOMENONLY': women_only, 

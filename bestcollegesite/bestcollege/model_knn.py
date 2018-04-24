@@ -26,12 +26,14 @@ def apply_knn(user_input={}, user_filters={}):
   SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
   df = pd.read_csv(SITE_ROOT+"/data/cleaned_data.csv")
 
-  importance = {'HIGHDEG': 5, 'SAT_AVG': 1, 'ACTCMMID': 1, 'UGDS_WHITE': 4, 'UGDS_BLACK': 4, 
+  importance = {'HIGHDEG': 8, 'SAT_AVG': 1, 'ACTCMMID': 1, 'UGDS_WHITE': 4, 'UGDS_BLACK': 4, 
                 'UGDS_HISP': 4, 'UGDS_ASIAN': 4, 'UGDS_AIAN': 4, 'UGDS_NHPI': 4, 'UGDS_2MOR': 4, 
-                'UGDS_NRA': 4, 'UGDS_UNKN': 4, 'UG25ABV': 3, 'PPTUG_EF': 3, 'INC_PCT_LO': 2 , 
-                'INC_PCT_M1': 2, 'INC_PCT_M2': 2, 'INC_PCT_H1': 2, 'INC_PCT_H2': 2, 
-                'PAR_ED_PCT_1STGEN': 3, 'C150_4': 1, 'PCIP14': 1, "RPY_7YR_RT": 1, 
-                "MD_EARN_WNE_P6":1, "MD_EARN_WNE_P10":1, 'ADM_RATE': 1, 'COSTT4_A':1 }
+                'UGDS_NRA': 4, 'UGDS_UNKN': 4, 'UG25ABV': 3, 'PPTUG_EF': 4, 'INC_PCT_LO': 3 , 
+                'INC_PCT_M1': 3, 'INC_PCT_M2': 3, 'INC_PCT_H1': 3, 'INC_PCT_H2': 3, 
+                'PAR_ED_PCT_1STGEN': 4, 'C150_4': 1, 'PCIP14': 1, 'RPY_7YR_RT': 1, 
+                'RPY_3YR_RT': 1, 'RPY_5YR_RT': 1, "MD_EARN_WNE_P6":1, "MD_EARN_WNE_P10":1, 
+                'ADM_RATE': 1, 'COSTT4_A':1 , 'SPRING_TAVG': 2, 'SUMMER_TAVG': 2, 'FALL_TAVG': 2,
+                'WINTER_TAVG': 2}
 
   df_knn = df.copy()
 
