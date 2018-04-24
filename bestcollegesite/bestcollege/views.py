@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 from .model_knn import apply_knn
 from .model_topsis import perform_topsis
+from .diversity_mix import get_diversity_mix
 
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
@@ -132,6 +133,17 @@ def get_numeric_val(response, key):
     else:
         return None
 
+def get_updated_diversity_mix(survey_response):
+    if survey_response['demographicPreference']:
+        if survey_response['demographicType'] == 'Familiar Crowd':
+            mix = get_diversity_mix(survey_response['STABBR'], 1)
+        elif survey_response['demographicType'] == 'Balanced Mix':
+            mix = get_diversity_mix(survey_response['STABBR'], 2)
+        else:
+            mix = get_diversity_mix(survey_response['STABBR'], 3)
+        return mix
+    else:
+        return None
 
 
 def index(request):
@@ -199,6 +211,12 @@ def submit_survey(request):
             }
         #semesterTuition
         #stateSchool
+
+        print(user_input)
+        mix = get_updated_diversity_mix(survey_response)
+        if mix:
+            for i, key in enumerate(['UGDS_WHITE', 'UGDS_BLACK', 'UGDS_HISP', 'UGDS_ASIAN', 'UGDS_AIAN', 'UGDS_NHPI', 'UGDS_UNKN']):
+                user_input[key] = mix[i]
 
         tuition_in = None
         tuition_out = None
