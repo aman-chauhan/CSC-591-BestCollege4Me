@@ -553,10 +553,11 @@
           "title": "What sized student body are you looking for?",
           "isRequired": true,
           "choices": [
-            "Very small",
-            "Small",
-            "Medium",
-            "Large"
+            "Very small (upto 1000)",
+            "Small (1000 - 2500)",
+            "Medium (2500 - 10000)",
+            "Large (10000+)",
+            "Don't Care"
           ]
         },
         {
