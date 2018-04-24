@@ -17,9 +17,9 @@ def get_diversity_mix(home_state, option):
     oy = Y[X['STABBR'] != home_state]
     nbrs = NearestNeighbors(n_neighbors=len(homestates), algorithm='brute', metric='l1').fit(oy.values)
     d, i = nbrs.kneighbors(np.asarray(homestates[home_state]).reshape((1, -1)))
-    if option == '1':
+    if option == 1:
         return homestates[home_state]
-    elif option == '2':
+    elif option == 2:
         return Y.values[i[0]][:10].mean(axis=0).tolist()
     else:
         return Y.values[i[0]][-10:].mean(axis=0).tolist()

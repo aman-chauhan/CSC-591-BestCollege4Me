@@ -6,7 +6,6 @@ import pickle
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from sklearn.neighbors import NearestNeighbors
-from .diversity_mix import get_diversity_mix
 
 #Method to standardize data
 def standardize_data(df_sc):
