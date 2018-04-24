@@ -126,10 +126,13 @@ def get_historic( survey_historic, historic_key ):
 
 def get_numeric_val(response, key):
     if response[key]:
-        if '.' in response[key]:
-            return float(response[key])
+        if isinstance(response[key], str):
+            if '.' in response[key]:
+                return float(response[key])
+            else:
+                return int(response[key])
         else:
-            return int(response[key])
+            return response[key]
     else:
         return None
 
