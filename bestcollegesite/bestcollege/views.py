@@ -114,7 +114,7 @@ def get_income_range( survey_income, income_key ):
         return 0
 
 def get_student_body_size( survey_school_size ):
-    size_mapping = { 'Very small' : [0, 1000], 'Small' : [1000, 2500], 'Medium' : [2500, 10000], 'Large' : [10000, 100000] }
+    size_mapping = { 'Very small' : [0, 1000], 'Small' : [1000, 2500], 'Medium' : [2500, 10000], 'Large' : [10000, 100000], "Don't Care": [] }
     return size_mapping[survey_school_size]
 
 def get_historic( survey_historic, historic_key ):
