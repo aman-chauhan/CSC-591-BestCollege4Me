@@ -252,12 +252,53 @@
           ]
         },
         {
-          "type": "text",
+          "type": "radiogroup",
           "name": "acceptanceRate",
           "title":
-            "What is the lowest acceptance rate  you are looking for? (in terms of percent)",
-          "inputType": "number"
-        }
+            "Academically, I would prefer:",
+          "choices": [
+            {
+              "value": 0.1,
+              "text": "To be rigorously challeneged"
+            },
+            {
+              "value": 0.35,
+              "text": "To be challeneged"
+            },
+            {
+              "value": 0.60,
+              "text": "To work hard but have some time to focus on other things as well"
+            },
+            {
+              "value": 0.85,
+              "text": "To never touch a book. I'm here to party"
+            }
+          ]
+        },
+        {
+          "type": "radiogroup",
+          "name": "expectedEarnings",
+          "title":
+            "My college education will help me:",
+          "choices": [
+            {
+              "value": 80000,
+              "text": "Join the upper class"
+            },
+            {
+              "value": 55000,
+              "text": "Make a solid living and provide for my family"
+            },
+            {
+              "value": 30000,
+              "text": "Provide for myself"
+            },
+            {
+              "value": 0,
+              "text": "I do not anticipate my education contributing to my income after graduating."
+            }
+          ]
+        },
       ]
     },
     {
@@ -370,7 +411,7 @@
           "type": "radiogroup",
           "name": "demographicPreference",
           "title":
-            "Are you looking for a student body with a specific demogrphic?",
+            "Are you looking for a student body with a specific demographic?",
           "choices": [
             {
               "value": "yes",
@@ -529,7 +570,7 @@
           "type": "text",
           "name": "monthlyLoans",
           "title":
-            "How much are you antipiating to pay for montly tuition loans?",
+            "How much are you antipiating to pay for monthly tuition loans?",
           "inputType" : "number"
         }
       ]

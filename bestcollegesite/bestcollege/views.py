@@ -1,12 +1,20 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from .model_knn import apply_knn
+from .model_topsis import perform_topsis
 
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import Context, loader
 from django.views.decorators.csrf import csrf_exempt
 import json
+
+survey_response = {
+    'winter' : '40.0',
+    'spring' : '65.0',
+    'summer' : '80.0',
+    'fall' : '60'
+}
 
 religion_map = {
     "American Evangelical Lutheran Church" : 22,
@@ -128,6 +136,7 @@ def survey(request):
 def submit_survey(request):
     if request.method == 'POST':
         # survey as json
+        global survey_response
         survey_response = json.loads(request.body.decode('utf-8'))
         for key in survey_response:
             if survey_response[key] == '-1':
@@ -204,12 +213,20 @@ def submit_survey(request):
         if 'RELAFFIL' in survey_response:
             rel_affil = religion_map[survey_response['RELAFFIL']]
 
+        # not sure this is what we want, but taking their desired temp and making an min
+        # or max range of 5 in either direction
+        winter_range = [float ( survey_response['winter'] ) - 5, float ( survey_response['winter'] ) + 5]
+        spring_range = [float ( survey_response['spring'] ) - 5, float ( survey_response['spring'] ) + 5]
+        summer_range = [float ( survey_response['summer'] ) - 5, float ( survey_response['summer'] ) + 5]
+        fall_range = [float ( survey_response['fall'] ) - 5, float ( survey_response['fall'] ) + 5]
 
-        user_filters = { 'ADM_RATE' : [survey_response['acceptanceRate'] / 100.0, 1], 'UGDS' : get_student_body_size( survey_response['studentBodySize'] ),
+        user_filters = { 'ADM_RATE' : float ( survey_response['acceptanceRate'] ), 'UGDS' : get_student_body_size( survey_response['studentBodySize'] ),
         'TUITIONFEE_IN' : tuition_in, 'TUITIONFEE_OUT' : tuition_out, 'STABBR' : states, 'MAIN' : survey_response['MAIN'], 'CONTROL' : survey_response['CONTROL'],
         'RELAFFIL' : rel_affil, 'DISTANCEONLY' : survey_response['DISTANCEONLY'], 'HBCU': get_historic( historic_type, 'HBCU' ), 'PBI': get_historic( historic_type, 'PBI' ),
         'ANNHI': get_historic( historic_type, 'ANNHI' ), 'HSI': get_historic( historic_type, 'HSI' ), 'NANTI': get_historic( historic_type, 'NANTI' ),
-        'MENONLY': men_only, 'WOMENONLY': women_only, 'CIP14BACHL': 1, 'GRAD_DEBT_MDN10YR': [0,survey_response['monthlyLoans']] }
+        'MENONLY': men_only, 'WOMENONLY': women_only, 'CIP14BACHL': 1, 'GRAD_DEBT_MDN10YR': [0,survey_response['monthlyLoans']], 'MD_EARN_WNE_P10' : int ( survey_response['expectedEarnings'] ) }
+
+        print ( user_filters )
 
         unit_ids = apply_knn(user_input, user_filters)
 
@@ -246,8 +263,9 @@ def sort_results( request ):
         user_sort_data = json.loads( request.body.decode( 'utf-8' ) )
         print ( user_sort_data )
 
-    # sorting done here
+        #unit_ids = perform_topsis(  )
 
-    # fake new sorted map
-    unit_ids = [139959, 228875, 198419, 199193, 228778, 100858, 217882, 243744, 171100, 216597]
-    return HttpResponse( json.dumps( { 'ids' : unit_ids } ) )
+        unit_ids = perform_topsis( user_sort_data, survey_response )
+        print ( unit_ids )
+        #unit_ids = [139959, 228875, 198419, 199193, 228778, 100858, 217882, 243744, 171100, 216597]
+        return HttpResponse( json.dumps( { 'ids' : unit_ids } ) )
