@@ -25,19 +25,7 @@ def apply_pca(df_pca, n):
 def apply_knn(user_input={}, user_filters={}):
   SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
   df = pd.read_csv(SITE_ROOT+"/data/cleaned_data.csv")
-  #Temporary input values for now, 
-  #can get rid of these once we have an input coming in from the Survey page
-  # user_input = {'HIGHDEG': 4, 'SAT_AVG': 1500, 'ACTCMMID': 32, 'UGDS_WHITE': 1, 'UGDS_BLACK': 0, 
-  # 'UGDS_HISP': 0, 'UGDS_ASIAN': 0, 'UGDS_AIAN': 0, 'UGDS_NHPI': 0, 'UGDS_2MOR': 0, 'UGDS_NRA': 0, 
-  # 'UGDS_UNKN': 0, 'UG25ABV': 0, 'PPTUG_EF': 0, 'INC_PCT_LO': 0 , 'INC_PCT_M1': 0, 'INC_PCT_M2': 1, 
-  # 'INC_PCT_H1': 0, 'INC_PCT_H2': 0, 'PAR_ED_PCT_1STGEN': 0, 'C150_4': 1, 'PCIP14': 1}
-
-  # user_filters = {'ADM_RATE': [0.1,1], 'UGDS': [5000,50000], 'TUITIONFEE_IN': [0,40000], 
-  #                   'TUITIONFEE_OUT': None, 'STABBR': ['NC'], 'MAIN': 1, 'CONTROL': None, 
-  #                   'RELAFFIL': None, 'DISTANCEONLY': 0, 'HBCU': None, 'PBI': 0, 'ANNHI': 0,
-  #                   'HSI': 0, 'NANTI': 0, 'MENONLY': None, 'WOMENONLY': None,
-  #                   'CIP14BACHL': 1, 'GRAD_DEBT_MDN10YR': [0,300]}
-
+ 
   importance = {'HIGHDEG': 5, 'SAT_AVG': 1, 'ACTCMMID': 1, 'UGDS_WHITE': 4, 'UGDS_BLACK': 4, 
                 'UGDS_HISP': 4, 'UGDS_ASIAN': 4, 'UGDS_AIAN': 4, 'UGDS_NHPI': 4, 'UGDS_2MOR': 4, 
                 'UGDS_NRA': 4, 'UGDS_UNKN': 4, 'UG25ABV': 3, 'PPTUG_EF': 3, 'INC_PCT_LO': 2 , 
@@ -53,6 +41,8 @@ def apply_knn(user_input={}, user_filters={}):
       df_knn = df_knn.loc[df_knn['STABBR'].isin(states)]
   user_filters.pop("STABBR", None)
 
+  #Adding all the columns except the user input to the drop list
+  cols_to_drop = [col for col in df_knn.columns if col not in user_input.keys()]
 
   #Dropping input keys which are of no concern to the user
   input_keys_to_drop = []
@@ -63,8 +53,7 @@ def apply_knn(user_input={}, user_filters={}):
   for key in input_keys_to_drop:
       user_input.pop(key, None)
 
-  #Adding all the columns except the user input to the drop list
-  cols_to_drop = [col for col in df_knn.columns if col not in user_input.keys()]
+ 
 
   #Filtering the data further based on user specified filters
   for col,val in user_filters.items():
