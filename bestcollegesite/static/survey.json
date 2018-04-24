@@ -223,7 +223,7 @@
               "text": "Public"
             },
             {
-              "value": 0,
+              "value": 2,
               "text": "Private"
             },
             {
@@ -258,11 +258,11 @@
             "Academically, I would prefer:",
           "choices": [
             {
-              "value": 0.1,
+              "value": 0.0,
               "text": "To be rigorously challeneged"
             },
             {
-              "value": 0.35,
+              "value": 0.30,
               "text": "To be challeneged"
             },
             {
@@ -282,15 +282,15 @@
             "My college education will help me:",
           "choices": [
             {
-              "value": 80000,
+              "value": 90000,
               "text": "Join the upper class"
             },
             {
-              "value": 55000,
+              "value": 60000,
               "text": "Make a solid living and provide for my family"
             },
             {
-              "value": 30000,
+              "value": 35000,
               "text": "Provide for myself"
             },
             {
