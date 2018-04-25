@@ -2,7 +2,24 @@ from skcriteria import Data, MIN, MAX
 from skcriteria.madm import closeness, simple
 import pandas as pd
 import numpy as np
-import os
+import os, json, requests
+
+def get_bar_data( lat, lon ):
+	google_places_base_url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?radius=2500&types=bar&location='
+	google_places_api_key = '&key=AIzaSyAnsbjT7Dm9Qz9Daf8EgmaL1jaovBfV_Hc'
+	google_places_url = google_places_base_url
+	google_places_url = google_places_url + str ( lat ) + ','
+	google_places_url = google_places_url + str( lon )
+	res = requests.get( google_places_url + google_places_api_key ).json()
+	
+	total = 0
+	valid_count = 0
+	for i in range( 0, len( res['results'] ) ):
+		if 'rating' in res['results'][i]:
+			total = total + res['results'][i]['rating']
+			valid_count = valid_count + 1
+
+	return ( len( res['results'] ) / 20.0 + ( total / valid_count ) / 5.0 ) / 2.0
 
 def perform_topsis( raw_data, survey_data ):
 	SITE_ROOT = os.path.dirname( os.path.realpath(__file__) )
@@ -11,12 +28,13 @@ def perform_topsis( raw_data, survey_data ):
 	ids = []
 	# for matrix:
 	# overall weather diff avg | crimerate | nightlife score 
-	for key in raw_data['nightlife']['schools']:
-		ids.append( key )
-		winter_temp = float( df.loc[df['UNITID'] == np.int64( int ( key ) ), 'WINTER_TAVG'].iloc[0] )
-		spring_temp = float( df.loc[df['UNITID'] == np.int64( int ( key ) ), 'SPRING_TAVG'].iloc[0] )
-		summer_temp = float( df.loc[df['UNITID'] == np.int64( int ( key ) ), 'SUMMER_TAVG'].iloc[0] )
-		fall_temp = float( df.loc[df['UNITID'] == np.int64( int ( key ) ), 'FALL_TAVG'].iloc[0] )
+	for school in raw_data['schools']:
+		cur_id = school['id']
+		ids.append( cur_id )
+		winter_temp = float( df.loc[df['UNITID'] == np.int64( int ( cur_id ) ), 'WINTER_TAVG'].iloc[0] )
+		spring_temp = float( df.loc[df['UNITID'] == np.int64( int ( cur_id ) ), 'SPRING_TAVG'].iloc[0] )
+		summer_temp = float( df.loc[df['UNITID'] == np.int64( int ( cur_id ) ), 'SUMMER_TAVG'].iloc[0] )
+		fall_temp = float( df.loc[df['UNITID'] == np.int64( int ( cur_id ) ), 'FALL_TAVG'].iloc[0] )
 
 		winter_diff = abs( float( survey_data['winter'] ) - winter_temp )
 		spring_diff = abs( float( survey_data['spring'] ) - spring_temp )
@@ -24,9 +42,10 @@ def perform_topsis( raw_data, survey_data ):
 		fall_diff = abs( float( survey_data['fall'] ) - fall_temp )
 		diff = ( winter_diff + spring_diff + summer_diff + fall_diff ) / 4.0
 
-		crimerate = float( df.loc[df['UNITID'] == np.int64( int ( key ) ), 'CRIME_COUNT'].iloc[0] )
+		max_crimerate = float( df['CRIME_COUNT'].max() )
+		crimerate = float( df.loc[df['UNITID'] == np.int64( int ( cur_id ) ), 'CRIME_COUNT'].iloc[0] )
 
-		matrix.append( [diff, crimerate, float( raw_data['nightlife']['schools'][key]['nightlife_score'] )] )
+		matrix.append( [diff, crimerate / max_crimerate, get_bar_data( school['lat'], school['lon'] )] )
 
 	#print ( matrix )
 	criteria = [MIN, MIN, MAX]

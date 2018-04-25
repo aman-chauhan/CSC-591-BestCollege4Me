@@ -4,7 +4,7 @@ function map_builder( ret_data ) {
 
 	var svg = d3.select( "#graph_col" ).append( "svg" )
 		.attr( "width", width )
-		.attr( "height", height );
+		.attr( "height", height )
 
 	var projection = d3.geoAlbersUsa().translate( [width/2, height/2] );
 	var path = d3.geoPath()
